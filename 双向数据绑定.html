@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <p id="app"></p>
+        <p id="app2"></p>
+        <button id="btn">点击+1</button>
+        <button id="btn2">点击+a</button>
+    </body>
+    <script>
+        let obj = {
+            a:1,
+            b:'a'
+        }
+
+        Object.keys(obj).map( item =>{
+            new observer(obj, item, obj[item])
+        })
+        new watcher(() => {
+            document.getElementById('app').innerHTML = obj.a
+            document.getElementById('app2').innerHTML = obj.b
+        })
+
+        document.querySelector('#btn').addEventListener('click', () => {
+            obj.a += 1
+        })
+        document.querySelector('#btn2').addEventListener('click', () => {
+            obj.b += 'a'
+        })
+
+        function dep(){
+            this.arrs = []
+            this.addArrs = function (watcher) {
+                this.arrs = []
+                this.arrs.push(watcher)
+            }
+            this.notify = function () {
+                this.arrs.map(item => {
+                    item.update()
+                })
+            }
+        }
+
+        function observer(obj,key,val){
+            let _dep = new dep()
+            if (Object.prototype.toString.call(val) == '[object Object]') {
+                new observer()
+            }
+            Object.defineProperty(obj,key,{
+                configurable:true,
+                enumerable:true,
+                get(){
+                    if (dep.target) {
+                        _dep.addArrs(dep.target)
+                    }
+                    return val
+                },
+                set(newVal){
+                    val = newVal
+                    _dep.notify()
+                }
+            })
+        }
+
+        function watcher(cb){
+            this.update = function () {
+                dep.target = this
+                cb()
+                dep.target = null
+            }
+            this.update()
+        }
+
+    </script>
+</html>
