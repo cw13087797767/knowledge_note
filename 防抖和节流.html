@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <input type="text" oninput="OnInput(event)">
+        <button onclick="OnClick()">节流按钮</button>
+    </body>
+    <script>
+        // 防抖
+        let fdTimer = null
+        OnInput = function(e){
+            clearTimeout(fdTimer)
+            fdTimer = setTimeout(() => {
+                //需要执行的方法
+                console.log(e.target.value)
+            }, 500);
+        }
+
+        // 节流
+        let lastTime = null
+        OnClick = function () {
+            if (lastTime && new Date() - lastTime < 1000) {
+                return
+            }else{
+                lastTime = new Date()
+                console.log('节流')
+            }
+        }
+    </script>
+</html>
