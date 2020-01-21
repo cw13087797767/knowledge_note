@@ -16,25 +16,29 @@
 ## vue文件怎么写
     在开发vue文件时，写法和不用ts简直就是天差地别啊，从最开始的export default开始，到data的写法，完全就是不一样的存在。废话不多说，直接上代码
 
-···
+```
+
     <script lang="ts">
-    import {Vue, Component} from 'vue-property-decorator'
-    import FooterComponent from '@/components/commom/footer/index.vue';
-    import { State,Mutation,Action } from 'vuex-class';
-    @Component({
-        components:{
-            FooterComponent
+        import {Vue, Component} from 'vue-property-decorator'
+        import FooterComponent from '@/components/commom/footer/index.vue';
+        import { State,Mutation,Action } from 'vuex-class';
+        @Component({
+            components:{
+                FooterComponent
+            }
+        })
+        export default class HomeComponent extends Vue {
+            @State('headerModule') headerModule:any
+            @Mutation('set_headerText') set_headerText:any;
+            created() {
+                this.set_headerText('主页');
+            }
         }
-    })
-    export default class HomeComponent extends Vue {
-        @State('headerModule') headerModule:any
-        @Mutation('set_headerText') set_headerText:any;
-        created() {
-            this.set_headerText('主页');
-        }
-    }
     </script>
-···
+```
+
+
+
     1、在script标签中需要加上语言标记 lang="ts"
     2、需要引入 vue-property-decorator 这一个东西
     3、不是简单的 export default {} 就完事的了，需要换成类的写法类写
