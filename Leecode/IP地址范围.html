@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 回溯解法
+        const restoreIpAddresses = (s) =>{
+            console.time("dfs:")
+            const res = []
+            if (s.length < 4 || s.length > 12 || +s > 255255255255) {       // 穷举不符合的字符串
+                return res
+            }
+            let i = 0 
+            const dfs = (subRes,start) => {     
+                i++                            
+                if (subRes.length == 4 && start == s.length) {              // 满4段，并且用完字符串
+                    res.push(subRes.join('.'))
+                    return
+                }
+                if(subRes.length == 4 && start < s.length){                 // 满4段，但是还没用完字符串
+                    return
+                }
+                for (let len = 1; len <= 3; len++) {                        // 三种长度的选择，
+                    if (start + len - 1 >= s.length) {                      // 超出字符串长度
+                        return 
+                    }
+                    if (len != 1 && s[start] == '0') {                      // 不能使0x，0xx 开头
+                        return
+                    }
+                    const str = s.substring(start,start + len)              // 根据指针切片 长度0~3
+                    if (len == 3 && +str > 255) {                           // 字符串长度为3 并且大于255
+                        return
+                    }
+                    subRes.push(str)                                        // 添加截取字符串片段
+                    dfs(subRes, start + len)                                // 基于这种选择，向下选择
+                    subRes.pop()                                            // 撤销最后的选择，回到上一步状态
+                }
+            }
+            dfs([],0)                                                       // 入口
+            console.log(i)
+            console.log(res)
+            console.timeEnd("dfs:")
+            return res
+        }
+        restoreIpAddresses("255255255255")
+        /**
+            代码思路：
+                1.过滤不符合条件的IP字符串
+                2.创建dfs算法，用于字符串解析回溯
+                3.dfs算法中，如果满足条件subRes（ip数组）长度等于4，并且start（字符串截取下标）等于字符串长度，添加有效ip
+                4.如果subRes（ip数组）长度等于4，但是start（字符串截取下标）小于字符串长度，关闭这条路径
+                5.for循环1~3，截取字符串长度
+                6.如果截取字符串下标+截取长度 大于字符串长度，关闭这条路径
+                7.如果截取长度不是1，并且是0开头，则关闭这条路径 因为不能以0x，0xx开头
+                8.截取字符串长度
+                9.如果截取字符串长度为3，并且截取字符串大于255，关闭这条路径
+                10.subRes（ip数组）添加截取的字符串
+                11.根据subRes（ip数组）添加的内容进行dfs递归
+                12.如果上一步添加的数据不满足条件，则撤销上一步的添加数据
+
+            整体思路：
+                1.首先排除不符合条件的字符串
+                2.dfs递归方法中定义两个入参，subRes 和 start
+                    2.1）subRes作用：存储截取的ip字段
+                    2.2）start作用：记录截取字符串的下标
+                3.dfs递归方法中for循环作用
+                    3.1）根据截取下标和截取长度截取对应的字符串
+                    3.2）每截取一次字符串长度递归一次dfs方法，把截取得到的数组和截取的下标传递下去
+                    3.3）截取的过程中判断截取的内容是否符合条件，不符合条件如下
+                        3.3.1）首先截取的下标 + 截取的长度超过了字符串的长度
+                        3.3.2）截取长度不为1时判断截取的字符串开头是否是0，不能0x 0xx开头
+                        3.3.3）判断截取长度为3时，截取的数据是否大于255
+                    3.4）在截取符合条件的字符串添加到subRes后，继续向下递归，如果向下递归的方法不满足条件，
+                        那么就撤回上一步的添加的截取字符串
+                4.dfs递归方法满足条件
+                    满足：当subRes的长度为4并且截取下标等于字符串长度
+        */
+
+        // 暴力for循环解法
+        const restoreIpAddresses = (s) =>{
+            console.time("for:")
+            if (s.length < 4 || s.length > 12 || +s > 255255255255) {
+                return []
+            }
+            let ipArr = []
+            for (let i = 1; i < 4; i++) {
+                let s1 = s.substring(i).length
+                if (s1 > 9 || s1 < 3) continue
+                let str1 = s.substring(0,i)
+                if ((str1.startsWith('0') && i > 1) || +str1 > 255) continue
+                for (let j = i + 1; j < 7; j++) {
+                    let s2 = s.substring(j).length
+                    if (s2 > 6 || s2 < 2) continue
+                    let str2 = s.substring(i,j)
+                    if((str2.startsWith("0") && j > i+1) || +str2 > 255) continue
+                    for (let k = j + 1; k < 10; k++) {
+                        let s3 = s.substring(k).length
+                        if (s3 > 3 || s3 < 1) continue
+                        let str3 = s.substring(j,k)
+                        if((str3.startsWith('0') && k > j+1) || +str3 > 255) continue
+                        let str4 = s.substring(k)
+                        if (str4.length > 3 || +str4 > 255 || str4.startsWith('0') && str4.length > 1) continue
+                        ipArr.push(`${str1}.${str2}.${str3}.${str4}`)
+                    }
+                }
+            }
+            console.log(ipArr)
+            console.timeEnd("for:")
+            return ipArr
+        }
+        restoreIpAddress2("255255255255")
+
+        /**
+            整体思路：
+                1.先过滤不符合条件的ip字符串
+                2.for循环截取字符串长度1~3， 再判断截取字符串是否符合条件，剩余字符串是否符合条件
+        */
+    </script>
+</body>
+</html>
