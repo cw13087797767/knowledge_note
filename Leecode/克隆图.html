@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 133. 克隆图
+        // 给你无向 连通 图中一个节点的引用，请你返回该图的 深拷贝（克隆）。
+
+        // 图中的每个节点都包含它的值 val（int） 和其邻居的列表（list[Node]）。
+
+        // class Node {
+        //     public int val;
+        //     public List<Node> neighbors;
+        // }
+        
+
+        // 测试用例格式：
+
+        // 简单起见，每个节点的值都和它的索引相同。例如，第一个节点值为 1（val = 1），第二个节点值为 2（val = 2），以此类推。该图在测试用例中使用邻接列表表示。
+
+        // 邻接列表 是用于表示有限图的无序列表的集合。每个列表都描述了图中节点的邻居集。
+
+        // 给定节点将始终是图中的第一个节点（值为 1）。你必须将 给定节点的拷贝 作为对克隆图的引用返回。
+        
+        
+        // 输入：adjList = [[2,4],[1,3],[2,4],[1,3]]
+        // 输出：[[2,4],[1,3],[2,4],[1,3]]
+        // 解释：
+        // 图中有 4 个节点。
+        // 节点 1 的值是 1，它有两个邻居：节点 2 和 4 。
+        // 节点 2 的值是 2，它有两个邻居：节点 1 和 3 。
+        // 节点 3 的值是 3，它有两个邻居：节点 2 和 4 。
+        // 节点 4 的值是 4，它有两个邻居：节点 1 和 3 。
+
+
+        function Node(val, neighbors) {
+            this.val = val === undefined ? 0 : val;
+            this.neighbors = neighbors === undefined ? [] : neighbors;
+        };
+
+        var cloneGraph = function(node) {
+            let map = new Map()
+            const cloneNode = (node) => {
+                if (!node) {
+                    return null
+                }
+                if (map.has(node.val)) {
+                    return map.get(node.val)   
+                }
+                let newNode = new Node(node.val,[])
+                map.set(node.val,newNode)
+                for (const nodeNeighbors of node.neighbors) {
+                    newNode.neighbors.push(cloneNode(nodeNeighbors))
+                }
+                return newNode
+            }
+            return cloneNode(node)
+        }
+
+        let a = {
+            val:1,
+        }
+        let b = {
+            val:2,
+        }
+        let c = {
+            val:3,
+        }
+        let d = {
+            val:4,
+        }
+        a.neighbors = [b,d]
+        b.neighbors = [a,c]
+        c.neighbors = [b,d]
+        d.neighbors = [a,c]
+        console.log(a)
+        console.log(cloneGraph(a))
+
+        /**
+            解题思路：
+                这道题考的是深拷贝一个闭环的数据结构
+                用深度遍历的方式来解决就是首先避免死循环，可以用map，也可以用数组来实现避免重复
+                写一个递归的方法来遍历neighbors，用于创建neighbors 中的新 node，判断创建的新 node 是否重复，重复即返回已创建元素
+        */
+    </script>
+</body>
+</html>
