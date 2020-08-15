@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给出一些不同颜色的盒子，盒子的颜色由数字表示，即不同的数字表示不同的颜色。
+        // 你将经过若干轮操作去去掉盒子，直到所有的盒子都去掉为止。每一轮你可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
+        // 当你将所有盒子都去掉之后，求你能获得的最大积分和。
+
+        //  
+
+        // 示例：
+
+        // 输入：boxes = [1,3,2,2,2,3,4,3,1]
+        // 输出：23
+        // 解释：
+        // [1, 3, 2, 2, 2, 3, 4, 3, 1] 
+        // ----> [1, 3, 3, 4, 3, 1] (3*3=9 分) 
+        // ----> [1, 3, 3, 3, 1] (1*1=1 分) 
+        // ----> [1, 1] (3*3=9 分) 
+        // ----> [] (2*2=4 分)
+        var removeBoxes = function(boxes) {
+            console.log(boxes)
+            let map = new Map()
+            for (let i = 0; i < boxes.length; i++) {
+                map.has(boxes[i]) 
+                ? map.set(boxes[i],map.get(boxes[i])+1)
+                : map.set(boxes[i],1)
+            }
+            console.log(map)
+            let arr = []
+            map.forEach((val,key) => {
+                arr.push({
+                    num:key,
+                    size:val
+                })
+            })
+            arr.sort((a,b)=>a.size - b.size)
+            console.log(arr)
+            let scoped = 0
+            arr.map( item =>{
+                let strArr = []
+                let strIndex = boxes.indexOf(item.num)
+                while (strIndex > -1) {
+                    strArr.push(strIndex)
+                    strIndex = boxes.indexOf(item.num,strIndex+1)
+                }
+                strArr = strArr.reverse()
+                console.log('strArr',strArr)
+                let series = 1                                                      //连续个数
+                let strArrIndex = 0                                                 //strArr下标
+                while (strArr.length > 0) {
+                    if (strArrIndex + 1 < strArr.length && strArr[strArrIndex] - 1 == strArr[strArrIndex + 1]) {   //判断下标是否连续
+                        series++
+                        strArrIndex++
+                    }else{
+                        boxes.splice(strArr[0]-strArrIndex,series)
+                        scoped += Math.pow(series,2)
+                        console.log(Math.pow(series,2))
+                        strArr.splice(0,series)
+                        series = 1
+                        strArrIndex = 0
+                    }
+                }   
+                console.log('boxes',boxes) 
+            })
+            console.log(scoped)
+        };
+
+        removeBoxes([1,3,2,2,2,3,4,3,1])
+
+        // 做不出来
+    </script>
+</body>
+</html>
