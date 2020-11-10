@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+
+    如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+
+    必须原地修改，只允许使用额外常数空间。
+
+    以下是一些例子，输入位于左侧列，其相应输出位于右侧列。
+    1,2,3 → 1,3,2
+    3,2,1 → 1,2,3
+    1,1,5 → 1,5,1 -->
+
+    <script>
+        var nextPermutation = function(nums) {
+            let s = (l, r, t) => (t = nums[l], nums[l] = nums[r], nums[r] = t), l = -1, r = nums.length
+            for(let i = r; i--;)
+                if (nums[i] > nums[i - 1]) l = i - 1, i = 0
+            if (l !== -1) 
+                for(i = r; i-- > l;)
+                    if (nums[i] > nums[l]) s(i, l), i = 0
+            while (++l < --r) s(l, r)
+        };
+
+        console.log(nextPermutation([1,3,2]))
+    </script>
+</body>
+</html>
