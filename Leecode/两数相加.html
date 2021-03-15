@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+//         给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+
+// 请你将两个数相加，并以相同形式返回一个表示和的链表。
+
+// 你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+
+    function ListNode(val, next) {
+        this.val = (val===undefined ? 0 : val)
+        this.next = (next===undefined ? null : next)
+    }
+
+    let a3 = new ListNode(3,null)
+    let a2 = new ListNode(4,a3)
+    let a1 = new ListNode(2,a2)
+    let b5 = new ListNode(4,null)
+    let b4 = new ListNode(4,b5)
+    let b3 = new ListNode(4,b4)
+    let b2 = new ListNode(6,b3)
+    let b1 = new ListNode(5,b2)
+    console.log(a1, b1)
+
+    const addTwoNumbers = (l1,l2) => {
+        const l1Arr = [], l2Arr = [], allArr = []
+        while (l1.next || l2.next) {
+            l1Arr.unshift(l1.val)
+            l2Arr.unshift(l2.val)
+            l1 = l1.next || new ListNode()
+            l2 = l2.next || new ListNode()
+        }
+        l1Arr.unshift(l1.val)
+        l2Arr.unshift(l2.val)
+        console.log(l1Arr)
+        console.log(l2Arr)
+        for (let i = 0; i < l1Arr.length; i++) {
+            allArr.push(l1Arr[i] + l2Arr[i])
+        }
+        allArr.reverse()
+        console.log(allArr)
+        for (let i = 0; i < allArr.length; i++) {
+            if (allArr[i] > 9) {
+                allArr[i] = allArr[i] -10
+                allArr[i+1] = isNaN(allArr[i+1]) ? 1 : allArr[i+1] + 1
+            }
+        }
+        console.log(allArr)
+        allArr.reverse()
+        return getNewList(allArr,null)
+    }
+
+    getNewList = (arr,list) => {
+        if (arr.length === 0) {
+            return list
+        }
+        let _list = new ListNode(arr.shift(),list)
+        return getNewList(arr, _list)
+    }
+
+    // console.log(addTwoNumbers(a1,b1))
+    console.log(addTwoNumbers(getNewList([9,9,9,9,9,9,9],null),getNewList([9,9,9,9],null)))
+
+
+    </script>
+</body>
+</html>

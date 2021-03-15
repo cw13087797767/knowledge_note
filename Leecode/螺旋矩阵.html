@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给你一个 m 行 n 列的矩阵 matrix ，请按照 顺时针螺旋顺序 ，返回矩阵中的所有元素。
+        // const testArr = [
+        //     [1,2,3,4,5],
+        //     [6,7,8,9,10],
+        //     [11,12,13,14,15],
+        //     [16,17,18,19,20],
+        //     [21,22,23,24,25],
+        // ]
+        const testArr = [
+            [7],
+            [8],
+            [9],
+        ]
+
+
+        const sliceFunc = (matrix = [],valueArr = [],type = 0) => {
+            if (matrix.length === 0) {
+                return valueArr
+            }
+            const sliceArr = []
+            switch (type) {
+                // 上
+                case 0:
+                    sliceArr.push(...matrix.shift())
+                    break;
+                case 1:
+                    let arr1 = []
+                    for (let i = matrix.length-1; i > -1; i--) {
+                        if (matrix[i].length === 1) {
+                            arr1.push(...matrix[i])
+                            matrix.splice(i,i+1)
+                        } else {
+                            arr1.push(matrix[i].pop())
+                        }
+                    }
+                    arr1.reverse()
+                    sliceArr.push(...arr1)
+                    break
+                case 2:
+                    const arr = matrix.pop()
+                    sliceArr.push(...arr.reverse())
+                    break
+                case 3:
+                    for (let i = matrix.length-1; i > -1; i--) {
+                        if (matrix[i].length === 1) {
+                            sliceArr.push(...matrix[i])
+                            matrix.splice(i,i+1)
+                        } else {
+                            sliceArr.push(matrix[i].shift())
+                        }
+                    }
+                    break
+            }
+            valueArr.push(...sliceArr)
+            return sliceFunc(matrix,valueArr,(type+1)%4)
+        }
+
+                
+        const spiralOrder = (matrix) => {
+            if (matrix[0].length === 1) {
+                const arr = []
+                for (let i = 0; i < matrix.length; i++) {
+                    arr.push(...matrix[i])
+                    
+                }
+                return arr
+            }
+            return sliceFunc(matrix,[],0)
+        }
+        console.log(spiralOrder(testArr))
+    </script>
+</body>
+</html>
