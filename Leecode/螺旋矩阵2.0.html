@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给你一个正整数 n ，生成一个包含 1 到 n2 所有元素，且元素按顺时针顺序螺旋排列的 n x n 正方形矩阵 matrix 。
+        // 1 <= n <= 20
+        // var generateMatrix = function(n) {
+        //     console.time('时间=')
+        //     const maxNum = n * n;
+        //     let curNum = 1;
+        //     const matrix = new Array(n).fill(0).map(() => new Array(n).fill(0));
+        //     let row = 0, column = 0;
+        //     const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]; // 右下左上
+        //     let directionIndex = 0;
+        //     while (curNum <= maxNum) {
+        //         matrix[row][column] = curNum;
+        //         curNum++;
+        //         const nextRow = row + directions[directionIndex][0], nextColumn = column + directions[directionIndex][1];
+        //         if (nextRow < 0 || nextRow >= n || nextColumn < 0 || nextColumn >= n || matrix[nextRow][nextColumn] !== 0) {
+        //             directionIndex = (directionIndex + 1) % 4; // 顺时针旋转至下一个方向
+        //         }
+        //         row = row + directions[directionIndex][0];
+        //         column = column + directions[directionIndex][1];
+        //     }
+        //     console.timeEnd('时间=')
+        //     return matrix;
+        // };
+        const generateMatrix = n => {
+            const arrList = new Array(n).fill(0).map(() => new Array(n).fill(0))
+            const maxNum = n*n
+            const directions = [[0,1],[1,0],[0,-1],[-1,0]]
+            let currentNum = 1
+            let directionIndex = 0
+            let row = 0, column = 0
+            while (currentNum <= maxNum) {
+                arrList[row][column] = currentNum
+                currentNum++;
+                const nextRow = row + directions[directionIndex][0]
+                const nextColumn = column + directions[directionIndex][1]
+                if (nextRow >= n || nextRow < 0 || nextColumn >= n || nextColumn < 0 || arrList[nextRow][nextColumn] !== 0 ) {
+                    directionIndex = (directionIndex+1) % 4
+                }
+                row += directions[directionIndex][0]
+                column += directions[directionIndex][1]
+            }
+            return arrList
+        }
+        console.log(generateMatrix(20))
+    </script>
+</body>
+</html>
