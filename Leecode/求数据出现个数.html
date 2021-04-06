@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const a = [1,1,1,2,2,2,3,3,3,4,5,6,7,8,9,10]
+        const getNums = arr => {
+            // const obj = {}
+            // arr.map(item => {
+            //     obj.hasOwnProperty(item +'') ? obj[item+''] +=1 : obj[item+''] = 1
+            // })
+            // return obj
+            const map = new Map()
+            arr.map(item => {
+                map.has(item+'') ? map.set(item + '',map.get(item + '') + 1)  : map.set(item+'',1)
+            })
+            return map
+        }
+        console.log(getNums(a))
+    </script>
+</body>
+</html>
