@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="video">
+        <video id="video" src="./Video.mp4" autobuffer ></video>
+        <button onclick="play()">播放/暂停</button>
+        <!-- <video id="video" src="./Video.mp4"  autobuffer ></video> -->
+    </div>
+    <script>
+        const video = document.getElementById('video')
+        // video.ontimeupdate = (e) => {
+        //     console.log(e.target.currentTime)
+        // }
+        // setTimeout(() => {       
+        //     // 总长度
+        //     console.log(video.duration)
+        //     console.log(video)
+        //     console.log(typeof video)
+        //     for (const key in video) {
+        //         console.log(key, video[key])
+        //     }
+        // }, 100);
+        function play() {
+            const video = document.getElementById('video')
+            video.paused ? video.play() : video.pause()
+        }
+    </script>
+</body>
+</html>
