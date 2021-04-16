@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        console.log('    7    ')
+        console.log('   3 8   ')
+        console.log('  8 1 0  ')
+        console.log(' 2 7 4 4 ')
+        console.log('4 5 2 6 5')
+        // 求一条从上到下，数字和最大的路径，只能左下或者右下
+        
+        const a = [
+            [7],
+            [3,8],
+            [8,1,0],
+            [2,7,4,4],
+            [4,5,2,6,5],
+        ]
+
+        /**
+         * 解法思路，从下往上运行
+         * 计算出第n的数据最大值数组，再计算n+1层的数据最大值数组
+         * 依次往上计算，求出总步数最大的值
+         * 
+         * 这种方法是把每一次运算的最大值给保留下来，用于下一次计算
+        */
+        const getMaxSums = arr => {
+            if (arr.length === 1) {
+                return arr
+            }
+            const dp = new Array(arr.length)
+            dp[arr.length -1] = arr[arr.length -1]
+            for (let i = arr.length - 2; i > -1; i--) {
+                dp[i] = []
+                for (let j = 0; j < arr[i].length; j++) {
+                    dp[i][j] = Math.max(arr[i][j] + dp[i+1][j], arr[i][j] + dp[i+1][j+1])
+                }
+            }
+            return dp
+        }
+        console.log(getMaxSums(a))
+        
+    </script>
+</body>
+</html>
