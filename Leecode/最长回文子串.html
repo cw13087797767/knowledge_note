@@ -83,18 +83,9 @@
             }
             //初始化二维数组
             var len = s.length;
-            // var arr = new Array(len);
-            // for(var i = 0;i<len;i++){
-            //     arr[i] = [];
-            //     for(var r = 0;r<len;r++){
-            //         count++
-            //         arr[i][r] = 0
-            //     }
-            // }
             const arr = new Array(len).fill(0).map(() => new Array(len).fill(0))
             for(var i = 0;i<len;i++){
                 for(var r=0;r<len;r++){
-                    count++
                     if(s[i] == s_f[r]){
                         if(i==0 || r==0){
                             arr[i][r] = 1
