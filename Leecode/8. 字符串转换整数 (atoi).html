@@ -95,7 +95,30 @@
 
         // 0 <= s.length <= 200
         // s 由英文字母（大写和小写）、数字（0-9）、' '、'+'、'-' 和 '.' 组成
-
+        var myAtoi = function(s="") {
+            const NUMBER = ['0','1','2','3','4','5','6','7','8','9']
+            s = s.trim()
+            let isMinus = false, str = '', flag = true
+            if (s.startsWith('-') || s.startsWith('+')) {
+                isMinus = s.startsWith('-')
+                s = s.slice(1)
+            }
+            while (flag && s.length > 0) {
+                if (NUMBER.indexOf(s[0]) > -1) {
+                    str += s[0]
+                    s = s.slice(1)
+                } else {
+                    flag = false
+                }
+            }
+            const minVal = Math.pow(-2, 31)
+            const maxVal = Math.pow(2, 31) -1
+            if (str.length > 0) {
+                return isMinus ? -(+str) < minVal ? minVal : -(+str) : +str > maxVal ? maxVal : +str
+            } else {
+                return 0
+            }
+        };
     </script>
 </body>
 </html>
