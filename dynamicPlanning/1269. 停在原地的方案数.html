@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 有一个长度为 arrLen 的数组，开始有一个指针在索引 0 处。
+
+        // 每一步操作中，你可以将指针向左或向右移动 1 步，或者停在原地（指针不能被移动到数组范围外）。
+
+        // 给你两个整数 steps 和 arrLen ，请你计算并返回：在恰好执行 steps 次操作以后，指针仍然指向索引 0 处的方案数。
+
+        // 由于答案可能会很大，请返回方案数 模 10^9 + 7 后的结果。
+
+        //  
+
+        // 示例 1：
+
+        // 输入：steps = 3, arrLen = 2
+        // 输出：4
+        // 解释：3 步后，总共有 4 种不同的方法可以停在索引 0 处。
+        // 向右，向左，不动
+        // 不动，向右，向左
+        // 向右，不动，向左
+        // 不动，不动，不动
+        // 示例  2：
+
+        // 输入：steps = 2, arrLen = 4
+        // 输出：2
+        // 解释：2 步后，总共有 2 种不同的方法可以停在索引 0 处。
+        // 向右，向左
+        // 不动，不动
+        // 示例 3：
+
+        // 输入：steps = 4, arrLen = 2
+        // 输出：8
+        //  
+
+        // 提示：
+
+        // 1 <= steps <= 500
+        // 1 <= arrLen <= 10^6
+
+        let count = 0
+
+
+        /**
+            深度遍历
+
+            17 7 117.01806640625 ms
+            18 7 309.0908203125 ms
+            19 7 830.765869140625 ms
+            20 7 2350.26904296875 ms
+            21 7 6385.433837890625 ms
+            22 7 30347.77392578125 ms
+        */
+        // 深度遍历
+
+        // var numWays = function(steps, arrLen) {
+        //     const recursion = (stpe, arrLen, res, index) => {
+        //         count++
+        //         if (index > stpe) {
+        //             return 0
+        //         }
+        //         if (res >= Math.pow(10, 9) + 7) {
+        //             return Math.pow(10, 9) + 7
+        //         }
+        //         if (stpe === 0 && index === 0) {
+        //             return res + 1
+        //         } else {
+        //             if (index === 0) {
+        //                 return recursion(stpe - 1, arrLen, res, index) + recursion(stpe - 1, arrLen, res, index + 1)
+        //             } else if (index === arrLen - 1) {
+        //                 return  recursion(stpe - 1, arrLen, res, index - 1) + recursion(stpe - 1, arrLen, res, index)
+        //             } else {
+        //                 return recursion(stpe - 1, arrLen, res, index + 1) + recursion(stpe - 1, arrLen, res, index - 1) + recursion(stpe - 1, arrLen, res, index)
+        //             }
+        //         }
+        //     }
+        //     return recursion(steps, arrLen, 0, 0)
+        // };
+
+
+        var numWays = function(steps, arrLen) {
+            const MODULO = 1000000007;
+            let maxColumn = Math.min(arrLen - 1, steps);
+            const dp = new Array(steps + 1).fill(0).map(() => new Array(maxColumn + 1).fill(0));
+            dp[0][0] = 1;
+            for (let i = 1; i <= steps; i++) {
+                for (let j = 0; j <= maxColumn; j++) {
+                    dp[i][j] = dp[i - 1][j];
+                    if (j - 1 >= 0) {
+                        dp[i][j] = (dp[i][j] + dp[i - 1][j - 1]) % MODULO;
+                    }
+                    if (j + 1 <= maxColumn) {
+                        dp[i][j] = (dp[i][j] + dp[i - 1][j + 1]) % MODULO;
+                    }
+                }
+            }
+            return dp[steps][0];
+        };
+        console.time("时间：")
+        console.log(numWays(27, 7))
+        console.timeEnd("时间：")
+        </script>
+</body>
+</html>
