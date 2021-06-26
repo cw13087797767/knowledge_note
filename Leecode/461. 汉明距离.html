@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 两个整数之间的汉明距离指的是这两个数字对应二进制位不同的位置的数目。
+
+        // 给出两个整数 x 和 y，计算它们之间的汉明距离。
+
+        // 注意：
+        // 0 ≤ x, y < 231.
+
+        // 示例:
+
+        // 输入: x = 1, y = 4
+
+        // 输出: 2
+
+        // 解释:
+        // 1   (0 0 0 1)
+        // 4   (0 1 0 0)
+        //     ↑   ↑
+
+        var hammingDistance = function(x, y) {
+            const _x = x.toString(2).split("").reverse().join("")
+            const _y = y.toString(2).split("").reverse().join("")
+            let count = 0
+            for (let i = 0; i < Math.max(_x.length, _y.length); i++) {
+                let xi = _x[i] || '0',
+                    yi = _y[i] || '0'
+                if (xi !== yi) {
+                    count++
+                }
+            }
+            return count
+        };
+    </script>
+</body>
+
+</html>
