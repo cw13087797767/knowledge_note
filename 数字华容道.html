@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        .app{
+            height: 100%;
+            width:100%
+        }
+        .checkerboard{
+            height: 600px;
+            width: 600px;
+            border: solid 1px #eaea;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chess-row{
+            flex: 1;
+            display: flex;
+        }
+        .chess-pieces{
+            flex: 1;
+            margin: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bolder;
+            border-radius: 5px;
+        }
+        .ml10{
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            选择棋盘规模：
+            <button @click='changeType(3)'>3</button>
+            <button @click='changeType(4)'>4</button>
+            <button @click='changeType(5)'>5</button>
+            <button @click='changeType(6)'>6</button>
+            <button @click='changeType(7)'>7</button>
+            <button @click='changeType(8)'>8</button>
+            <button @click='changeType(9)'>9</button>
+            <button class="ml10" @click="reload">重置</button>
+            <button class="ml10" @click="initChess(type)">新的游戏</button></button>
+        </div>
+        <div class="checkerboard">
+            <div class="chess-row" v-for="(item, index) in chessPieces" :key="index" >
+                <div 
+                    class="chess-pieces" 
+                    :style="`${citem ? 'background: rgb(214, 243, 118);' : ''}}`" v-for="(citem, cindex) in item" 
+                    :key="cindex"
+                    @click="handleClick(citem, index, cindex)"
+                >{{ citem ? citem : '' }}</div>
+            </div>
+        </div>
+        <div class="labelContent">
+
+            <span>步数：{{ count }}</span>
+            <span class="ml10">用时：{{ useTime }}秒</span>
+        </div>
+    </div>
+    <script>
+        const app = new Vue({
+            el:"#app",
+            data:{
+                chessPieces:[],
+                reloadChessPieces:[],
+                reloadNullChess:{},
+                nullChess:{},
+                playEnd:false,
+                count:0,
+                type:3,
+                startTime:null,
+                timer:null,
+                useTime:0
+            },
+            created(){
+                this.initChess(this.type)
+            },
+            methods:{
+                changeType(type){
+                    this.type = type
+                    this.initChess(type)
+                },
+                conputeUseTIme(){
+                    this.useTime = (new Date().valueOf() - new Date(this.startTime).valueOf()) / 1000
+                },
+                reload(){
+                    this.chessPieces = JSON.parse(JSON.stringify(this.reloadChessPieces))
+                    this.nullChess = JSON.parse(JSON.stringify(this.reloadNullChess))
+                    this.resetVal()
+                },
+                mixinChess(){
+                    const step = Math.floor(Math.random()*1000)
+                    for (let i = 0; i < step; i++) {
+                        if (i % 2 === 0) {
+                            const x = this.nullChess.x
+                            const y = Math.round(Math.random()*(this.chessPieces.length - 1))
+                            this.handleClick(this.chessPieces[x][y], x, y, true)
+                        } else {
+                            const y = this.nullChess.y
+                            const x = Math.round(Math.random()*(this.chessPieces.length - 1))
+                            this.handleClick(this.chessPieces[x][y], x, y, true)
+                        }
+                    }
+                    this.reloadChessPieces = JSON.parse(JSON.stringify(this.chessPieces))
+                    this.reloadNullChess = JSON.parse(JSON.stringify(this.nullChess))
+                    this.resetVal()
+                },
+                resetVal(){
+                    this.count = 0
+                    this.playEnd = false
+                    this.startTime = new Date()
+                    this.useTime = 0
+                    if (this.timer) {
+                        clearInterval(this.timer)
+                        this.timer = null
+                    }
+                    this.timer = setInterval(() => {
+                        this.conputeUseTIme()
+                    }, 200);
+                },
+                initChess(type){
+                    const chessPieces = []
+                    let num = 1
+                    for (let i = 0; i < type; i++) {
+                        let arr = []
+                        for (let j = 0; j < type; j++) {
+                            if (i === type - 1 && j === type - 1) {
+                                arr.push(0)
+                            } else {
+                                arr.push(num++)
+                            }
+                        }
+                        chessPieces.push(arr)
+                    }
+                    this.chessPieces = chessPieces
+                    this.nullChess = {
+                        x: type - 1,
+                        y: type - 1
+                    }
+                    this.mixinChess()
+                },
+                handleClick(number, x, y, status){
+                    if (this.playEnd) {
+                        return
+                    }
+                    // 点击空位置
+                    if (x === this.nullChess.x && y === this.nullChess.y) {
+                        return 
+                    }
+                    // 点击与不相连的棋子
+                    if (x　!== this.nullChess.x && y !== this.nullChess.y) {
+                        return
+                    } else {
+                        const chessPieces = Array(...this.chessPieces)
+                        // 横向移动
+                        if (x === this.nullChess.x) {
+                            chessPieces[x].splice(this.nullChess.y, 1)
+                            chessPieces[x].splice(y,0,number)
+                        } else {
+                            // 纵向移动
+                            const arr = []
+                            for (let i = 0; i < chessPieces.length; i++) {
+                                arr.push(chessPieces[i][y])
+                            }
+                            arr.splice(this.nullChess.x, 1)
+                            arr.splice(x, 0, number)
+                            for (let i = 0; i < arr.length; i++) {
+                                chessPieces[i][y] = arr[i]
+                            }
+                        }
+                        chessPieces[x][y] = 0
+                        this.nullChess = {x, y}
+                        this.chessPieces = chessPieces
+                    }
+                    if (!status) {
+                        this.count++
+                        setTimeout(() => {
+                            this.isWin()
+                        });
+                    }
+                },
+                isWin(){
+                    if (this.chessPieces.map(item => item.join('')).join('') === this.getWinStatus()) {
+                        alert('你赢了')
+                        this.playEnd = true
+                        if (this.timer) {
+                            clearInterval(this.timer)
+                            this.timer = null
+                        }
+                    }
+                },
+                getWinStatus(){
+                    let str = '', count = 1
+                    for (let i = 0; i < this.type; i++) {
+                        for (let j = 0; j < this.type; j++) {
+                            if (i === this.type - 1 && j === this.type - 1) {
+                                str += '0'
+                            } else {
+                                str += count++
+                            }
+                        }
+                    }
+                    return str
+                }
+            }
+        })
+    </script>
+</body>
+</html>
