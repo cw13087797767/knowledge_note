@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。 
+
+        // 示例 1:
+
+        // 输入: amount = 5, coins = [1, 2, 5]
+        // 输出: 4
+        // 解释: 有四种方式可以凑成总金额:
+        // 5=5
+        // 5=2+2+1
+        // 5=2+1+1+1
+        // 5=1+1+1+1+1
+        // 示例 2:
+
+        // 输入: amount = 3, coins = [2]
+        // 输出: 0
+        // 解释: 只用面额2的硬币不能凑成总金额3。
+        // 示例 3:
+
+        // 输入: amount = 10, coins = [10] 
+        // 输出: 1
+        //  
+
+        // 注意:
+
+        // 你可以假设：
+
+        // 0 <= amount (总金额) <= 5000
+        // 1 <= coin (硬币面额) <= 5000
+        // 硬币种类不超过 500 种
+        // 结果符合 32 位符号整数
+        
+        var change = function(amount = 0, coins = []) {
+            if (amount === 0) {
+                return 1
+            }
+            // coins.sort((a, b) => a - b)
+            // const dp = [coins]
+            // // for (let i = 0; i < coins.length; i++) {
+            // //     for (let j = i; j < coins.length; j++) {
+            // //         let num = coins[i] + coins[j]
+            // //         if (num <= amount) {
+            // //             dp[1].push(num)
+            // //         }
+            // //     }
+            // // }
+            // while (amount - dp[dp.length-1][0] > 0) {
+            //     const arr = [], dpend = dp[dp.length-1]
+            //     for (let i = 0; i < coins.length; i++) {
+            //         for (let j = i; j < dpend.length; j++) {
+            //             let num = coins[i] + dpend[j]
+            //             arr.push(num)
+            //             // if (num <= amount) {
+            //             //     arr.push(num)
+            //             // }
+            //         }
+            //     }
+            //     dp.push(arr)
+            // }
+            // console.log(dp)
+            // let count = 0
+            // for (let i = 0; i < dp.length; i++) {
+            //     for (let j = 0; j < dp[i].length; j++) {
+            //         if (dp[i][j] === amount) {
+            //             count++
+            //         }
+            //     }
+            // }
+            // return count
+            const dp = new Array(amount + 1).fill(0);
+            dp[0] = 1;
+            for (const coin of coins) {
+                for (let i = coin; i <= amount; i++) {
+                    dp[i] += dp[i - coin];
+                }
+            }
+            console.log(dp)
+            return dp[amount];
+        };
+
+    </script>
+</body>
+</html>
