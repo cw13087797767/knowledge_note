@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+        // 示例 1：
+
+        // 输入：n = 3
+        // 输出：["((()))","(()())","(())()","()(())","()()()"]
+        // 示例 2：
+
+        // 输入：n = 1
+        // 输出：["()"]
+        //  
+
+        // 提示：
+
+        // 1 <= n <= 8
+
+        /**
+         * @param {number} n
+         * @return {string[]}
+         */
+        var generateParenthesis = function(n) {
+            let dp = new Array(n).fill('').map(a => [])
+            const isConform = function (arr) {
+                const list = []
+                for (let i = 0; i < arr.length; i++) {
+                    if (list[0] !== arr[i]) {
+                        list.shift()
+                    } else {
+                        list.push(arr[i])
+                    }
+                }
+                return list.length === 0
+            }
+            for (let i = 0; i < n; i++) {
+                if (i === 0) {
+                    dp[i].push('()')
+                } else {
+                    for (let j = 0; j < dp[i-1].length; j++) {
+                        const str = dp[i-1][j].split('')
+                        for (let k1 = 0; k1 < str.length-1; k1++) {
+                            for (let k2 = k1+1; k2 <= str.length; k2++) {
+                                const newStr = new Array(...str)
+                                newStr.splice(k1,0,'(')
+                                newStr.splice(k2,0,')')
+                                if (isConform(newStr)) {
+                                    dp[i].push(newStr.join(''))
+                                }
+                            }
+                        }
+                        dp[i] = Array.from(new Set(dp[i]))
+                    }
+                }
+            }
+            return dp[n-1]
+        };
+
+        console.time('t')
+        generateParenthesis(8)
+        console.timeEnd('t')
+    </script>
+</body>
+</html>
