@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给你一个非负整数数组 nums ，你最初位于数组的第一个位置。
+
+        // 数组中的每个元素代表你在该位置可以跳跃的最大长度。
+
+        // 你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+
+        // 假设你总是可以到达数组的最后一个位置。
+
+        //  
+
+        // 示例 1:
+
+        // 输入: nums = [2,3,1,1,4]
+        // 输出: 2
+        // 解释: 跳到最后一个位置的最小跳跃数是 2。
+        //      从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+        // 示例 2:
+
+        // 输入: nums = [2,3,0,1,4]
+        // 输出: 2
+        //  
+
+        // 提示:
+
+        // 1 <= nums.length <= 104
+        // 0 <= nums[i] <= 1000
+
+        /**
+         * @param {number[]} nums
+         * @return {number}
+         */
+        var jump = function(nums) {
+            /**
+             * 思路1：从后往前找
+             * 找到最后一步能跳到终点的下标，
+             * 然后再找能跳到倒数第二步的下标，
+             * 以此类推 可以用贪心算法来计算
+            */
+            // let step = 0
+            // let position = nums.length-1
+            // while (position > 0) {
+            //     for (let i = 0; i < nums.length; i++) {
+            //         if (i + nums[i] >= position) {
+            //             step++
+            //             position = i
+            //             break
+            //         }
+            //     }
+            // }
+            // return step
+            
+            /**
+             * 思路2：从前往后找
+             * 用贪心算法，每次找到可到达最远的位置，
+             * 就可以在线性时间内得到最少的跳跃次数
+             * 
+             * 这个还没理解，有点难
+            */
+            let end = 0
+            let maxPosition = 0
+            let step = 0
+            for (let i = 0; i < nums.length-1; i++) {
+                maxPosition = Math.max(maxPosition, i + nums[i])
+                if (i === end) {
+                    end = maxPosition
+                    step++
+                }
+            }
+            return step
+        };
+    </script>
+</body>
+</html>
