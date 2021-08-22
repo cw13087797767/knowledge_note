@@ -131,7 +131,7 @@
 ···
 
 ### 手动实现apply
-···javascript
+```javascript
     Function.prototype.myApply = function (object, arr) {
         let obj = object || window
         obj.fn = this
@@ -154,4 +154,4 @@
     console.log(add.myApply(obj)); // NaN
     console.log(add.myApply(obj, [3, 4])); // 10 
     console.log(add.myApply(obj, [1, 'abc', '2'])); // 4abc
-···
+```
