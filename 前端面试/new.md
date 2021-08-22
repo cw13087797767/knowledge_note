@@ -7,21 +7,21 @@
     2、通过this将属性和方法添加至这个对象
     3、最后返回this指向的新对象，也就是实例
 
-···
+```javascript
     let parent = function(name, age){
-        <!-- 1、创建一个新对象，赋予this,这一步操作是隐形的 -->
-        <!-- let this. = {} -->
-        <!-- 2、给this指向新的对象赋予构造属性 -->
+        // 1、创建一个新对象，赋予this,这一步操作是隐形的
+        // let this. = {}
+        // 2、给this指向新的对象赋予构造属性
         this.name = name
         this.age = age
-        <!-- 3、如果没有手动返回对象，则默认返回this指向的这个对象，也是隐式的 -->
-        <!-- 如果返回的不是对象，则会自动忽略这个返回值，返回隐式this指向的对象 -->
+        // 3、如果没有手动返回对象，则默认返回this指向的这个对象，也是隐式的
+        // 如果返回的不是对象，则会自动忽略这个返回值，返回隐式this指向的对象
         return this
     }
-···
+```
 
 ### 自己如何实现一个new
-···
+```javascript
     // 1、构造器函数
     let Parent = function(name, age){
         this.name = name
@@ -50,5 +50,4 @@
     child.hasOwnProperty('name')//true
     child.hasOwnProperty('age')//true
     child.hasOwnProperty('sayName')//false
-
-···
+```

@@ -5,8 +5,7 @@
 ### 相同点：这两个方法的作用是一样的，都是在特定的作用域中调用函数，刚与设置函数体内的this对象的值，以扩充函数依赖运行的作用域，一般来说，this总是指向调用某个方法的对象，但是使用call和apply方法时，就会改变this的指向。
 
 ### call()方法的使用示例：
-···
-    <script>
+```javascript
         // 例1：
         window.color = 'red'
         document.color = 'yellow'
@@ -33,12 +32,10 @@
             words:'Wang'
         }
         Pet.Speak.call(Dog,'Speak') // SpeakWang
-    </script>
-···
+```
 
 ### apply()方法的使用示例：
-···
-    <script>
+```javascript
         // 例1
         window.number = 'one'
         document.number = 'two'
@@ -66,15 +63,14 @@
         }
         var dog = new Dog('Wang');
         dog.speak();
-    </script>
-···
+```
 
 ### 不同点：接受参数的方式不同
     apply()方法接受两个参数，一个是函数运行的作用域（this），另一个是参数数组
     call()可以接受多个参数，第一个参数是函数运行的作用域（this），后面的参数需要一个一个列举出来
 
 ### 区别示例：
-···
+```javascript
     <script>
         // 例1：
         function add(c, d){
@@ -105,11 +101,10 @@
         getMessage.call(myObject,"未知",22); // myObject 性别: 未知 age: 22
         getMessage.apply(myObject,["未知",22]); // myObject 性别: 未知 age: 22
     </script>
-···
+```
 
 ### 手动实现call
-···
-    <script>
+```javascript
         Function.prototype.mycall = function(context){
             let obj = context || window
             obj.fn = this
@@ -127,8 +122,7 @@
         console.log(add.myCall(obj, 3, 4)); // 10  
         console.log(add.myCall({ a: 3, b: 9 }, 3, 4)); // 19
         console.log(add.myCall({ a: 3, b: 9 }, { xx: 1 }, 4)); // 12[object Object]4
-    </script>
-···
+```
 
 ### 手动实现apply
 ```javascript
