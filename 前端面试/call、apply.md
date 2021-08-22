@@ -71,7 +71,6 @@
 
 ### 区别示例：
 ```javascript
-    <script>
         // 例1：
         function add(c, d){
             return this.a + this.b + c + d
@@ -100,7 +99,6 @@
         getMessage.apply(window,["女",21]); // Cynthia_xie 性别: 女 age: 21
         getMessage.call(myObject,"未知",22); // myObject 性别: 未知 age: 22
         getMessage.apply(myObject,["未知",22]); // myObject 性别: 未知 age: 22
-    </script>
 ```
 
 ### 手动实现call
