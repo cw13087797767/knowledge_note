@@ -131,29 +131,27 @@
 ···
 
 ### 手动实现apply
-···
-    <script>
-        Function.prototype.myApply = function (object, arr) {
-            let obj = object || window
-            obj.fn = this
-            let result
-            if (!arr) {
-                return obj.fn()
-            }
-            if (!(arr instanceof Array)) {
-                throw new Error('params must be array')
-            }
-            result = obj.fn(...arr)
-            delete obj.fn
-            return result
+···javascript
+    Function.prototype.myApply = function (object, arr) {
+        let obj = object || window
+        obj.fn = this
+        let result
+        if (!arr) {
+            return obj.fn()
         }
-        // test
-        function add(c, d) {
-            return this.a + this.b + c + d;
+        if (!(arr instanceof Array)) {
+            throw new Error('params must be array')
         }
-        const obj = { a: 1, b: 2 };
-        console.log(add.myApply(obj)); // NaN
-        console.log(add.myApply(obj, [3, 4])); // 10 
-        console.log(add.myApply(obj, [1, 'abc', '2'])); // 4abc
-    </script>
+        result = obj.fn(...arr)
+        delete obj.fn
+        return result
+    }
+    // test
+    function add(c, d) {
+        return this.a + this.b + c + d;
+    }
+    const obj = { a: 1, b: 2 };
+    console.log(add.myApply(obj)); // NaN
+    console.log(add.myApply(obj, [3, 4])); // 10 
+    console.log(add.myApply(obj, [1, 'abc', '2'])); // 4abc
 ···
