@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /**
+         * 单例模式
+         * 含义 通过该模式创建的对象始终只有一个，后面创造的对象也会指向第一个创建的
+        */
+
+        // js实现方式1，将对象放在原型上 缺点就是这个实例挂在了全局上，别人可以进行修改
+        var Singleton1 = function(name, age){
+            if (typeof Singleton1.instance === 'object') {
+                return Singleton1.instance
+            }
+            this.name = name
+            this.age = age
+            Singleton1.instance = this
+
+            // 隐式返回
+            // return this
+        }
+
+        // js实现方式2：闭包方式 重写构造函数
+        var singleton2 = function(name, age) {
+            const instance = this
+            this.name = name
+            this.age = age
+            singleton2 = function() {
+                return instance
+            }
+        }
+
+        // 方式2的进阶版
+        var Singleton3 = function(name, age) {
+            let instance;
+            Singleton3 = function Singleton3() {
+                return instance
+            }
+            Singleton3.prototype = this
+            instance = new Singleton3()
+            instance.constructor = Singleton3
+            instance.name = name
+            instance.age = age
+            return instance
+        }
+
+    </script>
+</body>
+</html>
