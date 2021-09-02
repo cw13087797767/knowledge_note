@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // 参考地址 https://www.cnblogs.com/xbblogs/p/9917245.html
+        const BinTree = function(value) {
+            let obj = Object.create(null)
+            obj.value = value
+            obj.left = null
+            obj.right = null
+            return obj
+        }
+        
+        // 根据先序遍历数组创建二叉树
+        const createBinTree = arr => {
+            const newTree = new BinTree('#')          
+            const create = binTree => {
+                if (arr.length === 0) {
+                    return
+                }
+                const str = arr.shift()
+                if (str === '#') {
+                    return
+                }
+                binTree.value = str
+                if (arr[0] !== '#') {
+                    binTree.left = new BinTree('#')
+                }
+                create(binTree.left)
+                if (arr[0] !== '#') {
+                    binTree.right = new BinTree('#')
+                }
+                create(binTree.right)
+            }
+            create(newTree)
+            return newTree
+        }
+
+        const buildTree = (str = 'AB#D##C##') => {
+            const strArr = str.split('');
+            return createBinTree(strArr)
+        }
+
+        // 前序遍历      
+        const preorder = (binTree) => {
+            const arr = []
+            const proOrderTraverse = tree => {
+                if (!tree) return
+                arr.push(tree.value)
+                proOrderTraverse(tree.left)
+                proOrderTraverse(tree.right)
+            }
+            proOrderTraverse(binTree)
+            return arr
+        }
+
+        // 中序遍历
+        const infixOrder = (binTree) => {
+            const arr = []
+            const infixOrderTraverse = tree => {
+                if (!tree) return
+                infixOrderTraverse(tree.left)
+                arr.push(tree.value)
+                infixOrderTraverse(tree.right)
+            }
+            infixOrderTraverse(binTree)
+            return arr
+        }
+
+        // 后序遍历
+        const postOrder = (binTree) => {
+            const arr = []
+            const postOrderTraverse = tree => {
+                if (!tree) return
+                postOrderTraverse(tree.left)
+                postOrderTraverse(tree.right)
+                arr.push(tree.value)
+            }
+            postOrderTraverse(binTree)
+            return arr
+        }
+
+        // 深度优先遍历
+        const DeptSearch = binTree => {
+            const arr = []
+            const stack = [binTree]
+            while (stack.length > 0) {
+                const node = stack.pop()
+                arr.push(node.value)
+                if (node.right) {
+                    stack.push(node.right)
+                }
+                if (node.left) {
+                    stack.push(node.left)
+                }
+            }
+            return arr
+        }
+
+        // 广度优先遍历
+        const breadthSearch = binTree => {
+            const arr = []
+            const queue = [binTree]
+            while (queue.length > 0) {
+                let node = queue.shift()
+                arr.push(node.value)
+                if (node.left) {
+                    queue.push(node.left)
+                }
+                if (node.right) {
+                    queue.push(node.right)
+                }
+            }
+            return arr
+        }
+
+    </script>
+</body>
+</html>
