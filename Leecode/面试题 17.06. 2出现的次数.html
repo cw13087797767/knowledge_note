@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 编写一个方法，计算从 0 到 n (含 n) 中数字 2 出现的次数。
+
+        // 示例:
+
+        // 输入: 25
+        // 输出: 9
+        // 解释: (2, 12, 20, 21, 22, 23, 24, 25)(注意 22 应该算作两次)
+        // 提示：
+
+        // n <= 10^9
+
+
+
+        // 不会做！！！！！！
+
+
+
+        /**
+         * @param {number} n
+         * @return {number}
+         */
+        var numberOf2sInRange = function(n) {
+            console.time('')
+            let num = 0
+            for (let i = 0; i <= n; i++) {
+                let str = i+''
+                if (str.indexOf('2') > -1) {
+                    for (let j = 0; j < str.length; j++) {
+                        if (str[j] === '2') {
+                            num++
+                        }
+                    }
+                }
+            }
+            console.timeEnd('')
+            return num
+        }
+        // https://leetcode-cn.com/problems/number-of-2s-in-range-lcci/solution/mian-shi-ti-1706-2chu-xian-de-ci-shu-by-lz6ov/
+        var numberOf2sInRange2 = function(n) {
+            console.time('')
+            let sum = 0, base = 1, left = 0
+            while (n !== 0) {
+                let val = n % 10
+                n = Math.floor(n / 10)
+                sum += base*n
+                if (val === 2) {
+                    sum += left + 1
+                } else if (val > 2) {
+                    sum += base
+                }
+                left += base*val
+                base *= 10
+            }
+            console.timeEnd('')
+            return sum
+        }
+
+    </script>
+</body>
+</html>
