@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body{
+            margin: 0;
+            padding: 0;
+        }
+        .d1{
+            height: 200px;
+            width: 200px;
+            background-color: red;
+            position: fixed;
+            left: 100px;
+            top: 100px;
+        }
+        .d2{
+            height: 200px;
+            width: 200px;
+            background-color: yellow;
+            position: fixed;
+            left: 500px;
+            top: 200px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="d1" id="d1"></div>
+    <div class="d2" id="d2"></div>
+    <script>
+        // 用 document.onmousemove 代替 dom.onmousemove 
+        // 可以避免 dom.onmousemove 触发频率慢导致的卡顿问题
+        // 更深层次的原理 网上我没有找到他们的实现方式 
+        // 我大概猜想是 document.onmousemove 触发的频率比 dom.onmousemove 的低吧
+
+        function handleMouseDown(event, dom) {
+            if(!dom) return
+            const { clientX, clientY } = event
+            const domRect = dom.getBoundingClientRect()
+            const x = clientX - domRect.left
+            const y = clientY - domRect.top
+            if (event.preventDefault) {
+                event.preventDefault()
+            } else {
+                event.returnValue = false;
+            }
+
+            document.onmousemove = function (e) {
+                dom.style.left = e.clientX - x + 'px'
+                dom.style.top = e.clientY - y + 'px'
+            }
+            dom.onmouseup = function (e) {
+                document.onmousemove = null
+            }
+        }
+
+        const dom1 = document.getElementById('d1')
+        const dom2 = document.getElementById('d2')
+        dom1.onmousedown = event => handleMouseDown(event, dom1)
+        dom2.onmousedown = event => handleMouseDown(event, dom2)
+
+    </script>
+</body>
+</html>
