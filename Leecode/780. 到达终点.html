@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 从点 (x, y) 可以转换到 (x, x+y)  或者 (x+y, y)。
+
+        // 给定一个起点 (sx, sy) 和一个终点 (tx, ty)，如果通过一系列的转换可以从起点到达终点，则返回 True ，否则返回 False。
+
+        // 示例:
+        // 输入: sx = 1, sy = 1, tx = 3, ty = 5
+        // 输出: True
+        // 解释:
+        // 可以通过以下一系列转换从起点转换到终点：
+        // (1, 1) -> (1, 2)
+        // (1, 2) -> (3, 2)
+        // (3, 2) -> (3, 5)
+
+        // 输入: sx = 1, sy = 1, tx = 2, ty = 2
+        // 输出: False
+
+        // 输入: sx = 1, sy = 1, tx = 1, ty = 1
+        // 输出: True
+        /**
+         * @param {number} sx
+         * @param {number} sy
+         * @param {number} tx
+         * @param {number} ty
+         * @return {boolean}
+         */
+        var reachingPoints = function(sx, sy, tx, ty) {
+            // 动态规划超时了
+            // console.time("")
+            // const dp = [[[sx, sy]]]
+            // while (true) {
+            //     let len = dp.length
+            //     dp[len] = []
+            //     for (let i = 0; i < dp[len-1].length; i++) {
+            //         const item = dp[len-1][i]
+            //         if (item[0] === tx && item[1] === ty) {
+            //             console.timeEnd("")
+            //             return true
+            //         }
+            //         dp[len].push([item[0], item[0] + item[1]])
+            //         dp[len].push([item[0] + item[1], item[1]])
+            //     }
+            //     dp[len] = dp[len].filter(item => item[0] <= tx && item[1] <= ty);
+            //     if (dp[len].length === 0) {
+            //         console.timeEnd("")
+            //         return false
+            //     }
+            //     dp.shift()
+            // }
+
+            
+            // 回溯法 （取模变体）
+            while (tx >= sx && ty >= sy) {
+                if (tx == ty) break;
+                if (tx > ty) {
+                    if (ty > sy) tx %= ty;
+                    else return (tx - sx) % ty == 0;
+                } else {
+                    if (tx > sx) ty %= tx;
+                    else return (ty - sy) % tx == 0;
+                }
+            }
+            return (tx == sx && ty == sy);
+        };
+    </script>
+</body>
+</html>
