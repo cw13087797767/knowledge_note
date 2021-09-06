@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function CarMaker() {
+            
+        }
+        CarMaker.prototype.drive = function () {
+            console.log(`i have ${this.total} cars`) 
+        }
+        CarMaker.factory = function (type) {
+            if (typeof CarMaker[type] !== 'function') {
+                throw {
+                    name:"error",
+                    message:type  + 'does not exist'
+                }
+            }
+            if (typeof CarMaker[type].prototype.drive !== 'function') {
+                CarMaker[type].prototype = new CarMaker()
+            }
+            return new CarMaker[type]()
+        }
+        CarMaker.Compact = function () {
+            this.total = 4
+        }
+        CarMaker.Convertible = function () {
+            this.total = 2
+        }
+        CarMaker.SUV = function () {
+            this.total = 24
+        }
+
+        const corolla = CarMaker.factory('Compact')
+        const solstice = CarMaker.factory('Convertible')
+        const cherokee = CarMaker.factory('SUV')
+        corolla.drive()
+        solstice.drive()
+        cherokee.drive()
+    </script>
+</body>
+</html>
