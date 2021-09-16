@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给你一个字符串 s 和一个字符串数组 dictionary 作为字典，找出并返回字典中最长的字符串，该字符串可以通过删除 s 中的某些字符得到。
+
+        // 如果答案不止一个，返回长度最长且字典序最小的字符串。如果答案不存在，则返回空字符串。
+
+        //  
+
+        // 示例 1：
+
+        // 输入：s = "abpcplea", dictionary = ["ale","apple","monkey","plea"]
+        // 输出："apple"
+        // 示例 2：
+
+        // 输入：s = "abpcplea", dictionary = ["a","b","c"]
+        // 输出："a"
+        //  
+
+        // 提示：
+
+        // 1 <= s.length <= 1000
+        // 1 <= dictionary.length <= 1000
+        // 1 <= dictionary[i].length <= 1000
+        // s 和 dictionary[i] 仅由小写英文字母组成
+
+        /**
+         * @param {string} s
+         * @param {string[]} dictionary
+         * @return {string}
+         */
+        var findLongestWord = function(s, dictionary) {
+            let arr = [], maxLen = -1
+            for (let i = 0; i < dictionary.length; i++) {
+                let flag = true, str = s + ''
+                for (let j = 0; j < dictionary[i].length; j++) {
+                    let strIndex = str.indexOf(dictionary[i][j])
+                    if (strIndex === -1) {
+                        flag = false 
+                        break
+                    } else {
+                        str = str.substring(strIndex + 1)
+                    }
+                }
+                if (flag) {
+                    arr.push(dictionary[i])
+                    maxLen = Math.max(maxLen, dictionary[i].length)
+                } 
+            }
+            arr = arr.filter(a => a.length === maxLen).sort()
+            return arr[0] || ''
+        };
+    </script>
+</body>
+</html>

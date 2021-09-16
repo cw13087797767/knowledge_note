@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给定平面上 n 对 互不相同 的点 points ，其中 points[i] = [xi, yi] 。回旋镖 是由点 (i, j, k) 表示的元组 ，其中 i 和 j 之间的距离和 i 和 k 之间的距离相等（需要考虑元组的顺序）。
+
+        // 返回平面上所有回旋镖的数量。
+
+        //  
+        // 示例 1：
+
+        // 输入：points = [[0,0],[1,0],[2,0]]
+        // 输出：2
+        // 解释：两个回旋镖为 [[1,0],[0,0],[2,0]] 和 [[1,0],[2,0],[0,0]]
+        // 示例 2：
+
+        // 输入：points = [[1,1],[2,2],[3,3]]
+        // 输出：2
+        // 示例 3：
+
+        // 输入：points = [[1,1]]
+        // 输出：0
+        //  
+
+        // 提示：
+
+        // n == points.length
+        // 1 <= n <= 500
+        // points[i].length == 2
+        // -104 <= xi, yi <= 104
+        // 所有点都 互不相同
+
+        /**
+         * @param {number[][]} points
+         * @return {number}
+         */
+        // var numberOfBoomerangs = function(points) {
+        //     if (points.length < 3) {
+        //         return 0
+        //     }
+        //     let count = 0
+        //     for (let i = 0; i < points.length - 2; i++) {
+        //         for (let j = i + 1; j < points.length - 1; j++) {
+        //             for (let k = j + 1; k < points.length; k++) {
+        //                 const [xi, yi] = points[i]
+        //                 const [xj, yj] = points[j]
+        //                 const [xk, yk] = points[k]
+        //                 const p1 = Math.pow(xi - xj, 2) + Math.pow(yi - yj, 2)
+        //                 const p2 = Math.pow(xi - xk, 2) + Math.pow(yi - yk, 2)
+        //                 const p3 = Math.pow(xj - xk, 2) + Math.pow(yj - yk, 2)
+        //                 if (p1 === p2 || p2 === p3 || p1 === p3) {
+        //                     count += 2 
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return count
+        // };
+
+        /**
+         * @param {number[][]} points
+         * @return {number}
+         */
+        var numberOfBoomerangs = function(points) {
+            if (points.length < 3) {
+                return 0
+            }
+            let count = 0
+            for (let i = 0; i < points.length; i++) {
+                let map = new Map()
+                for (let j = 0; j < points.length; j++) {
+                    if (i === j) continue 
+                    const [xi, yi] = points[i]
+                    const [xj, yj] = points[j]
+                    const dis = Math.pow(xi - xj, 2) + Math.pow(yi - yj, 2)
+                    map.set(dis, map.has(dis) ? map.get(dis) + 1 : 1)
+                }
+                const arr = [...map].map(a => a[1])
+                for (let k = 0; k < arr.length; k++) {
+                    count += arr[k] * (arr[k] - 1)
+                }
+            }
+            return count
+        };
+
+    </script>
+</body>
+</html>

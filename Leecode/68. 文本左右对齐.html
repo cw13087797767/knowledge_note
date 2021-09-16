@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 给定一个单词数组和一个长度 maxWidth，重新排版单词，使其成为每行恰好有 maxWidth 个字符，且左右两端对齐的文本。
+
+        // 你应该使用“贪心算法”来放置给定的单词；也就是说，尽可能多地往每行中放置单词。必要时可用空格 ' ' 填充，使得每行恰好有 maxWidth 个字符。
+
+        // 要求尽可能均匀分配单词间的空格数量。如果某一行单词间的空格不能均匀分配，则左侧放置的空格数要多于右侧的空格数。
+
+        // 文本的最后一行应为左对齐，且单词之间不插入额外的空格。
+
+        // 说明:
+
+        // 单词是指由非空格字符组成的字符序列。
+        // 每个单词的长度大于 0，小于等于 maxWidth。
+        // 输入单词数组 words 至少包含一个单词。
+        // 示例:
+
+        // 输入:
+        // words = ["This", "is", "an", "example", "of", "text", "justification."]
+        // maxWidth = 16
+        // 输出:
+        // [
+        //    "This    is    an",
+        //    "example  of text",
+        //    "justification.  "
+        // ]
+        // 示例 2:
+
+        // 输入:
+        // words = ["What","must","be","acknowledgment","shall","be"]
+        // maxWidth = 16
+        // 输出:
+        // [
+        //   "What   must   be",
+        //   "acknowledgment  ",
+        //   "shall be        "
+        // ]
+        // 解释: 注意最后一行的格式应为 "shall be    " 而不是 "shall     be",
+        //      因为最后一行应为左对齐，而不是左右两端对齐。       
+        //     第二行同样为左对齐，这是因为这行只包含一个单词。
+        // 示例 3:
+
+        // 输入:
+        // words = ["Science","is","what","we","understand","well","enough","to","explain",
+        //          "to","a","computer.","Art","is","everything","else","we","do"]
+        // maxWidth = 20
+        // 输出:
+        // [
+        //   "Science  is  what we",
+        // "understand      well",
+        //   "enough to explain to",
+        //   "a  computer.  Art is",
+        //   "everything  else  we",
+        //   "do                  "
+        // ]
+
+        /**
+        * @param {string[]} words
+        * @param {number} maxWidth
+        * @return {string[]}
+        */
+        var fullJustify = function(words, maxWidth) {
+            const arr = []
+            let i = 0   // words数组当前下标
+            // 计算当前行最大能容纳单词数量
+            const compute = (index, maxlen) => {
+                let len = maxlen - words[index].length - 1
+                if (words[index + 1] && words[index + 1].length <= len) {
+                    return compute(index + 1, len)
+                } else {
+                    return index
+                }
+            }
+            while (i < words.length) {
+                let maxIndex = compute(i, maxWidth) // 最大的下标
+                if (maxIndex === words.length - 1) {    // 最后一个单词
+                    if (maxIndex - i === 0) {   // 一行只有一个单词
+                        let len = maxWidth - words[maxIndex].length
+                        let _arr = [words[maxIndex]]
+                        while (len > 0) {
+                            _arr.push(' ')
+                            --len
+                        }
+                        arr.push(_arr.join(''))
+                    } else {    // 一行两个单词以上
+                        let wordLen = maxIndex - i  // 单词数量
+                        let len = maxWidth  // 剩余字符数量
+                        let _arr = []
+                        for (let j = i; j <= maxIndex; j++) {
+                            len -= words[j].length
+                            if (j === maxIndex) {
+                                _arr.push(words[j])
+                                while (len > 0) {
+                                    _arr.push(' ')
+                                    --len
+                                }
+                            } else {
+                                _arr.push(words[j])
+                                _arr.push(' ')
+                                --len
+                            }
+                        }
+                        arr.push(_arr.join(''))
+                    }
+                } else {    // 非最后一个单词情况
+                    if (maxIndex - i === 0) {  // 一行只有一个单词
+                        let _arr = []
+                        _arr.push(words[maxIndex])
+                        let len = maxWidth - words[maxIndex].length
+                        for (let j = 0; j < len; j++) {
+                            _arr.push(' ')
+                        }
+                        arr.push(_arr.join(''))
+                    } else {    // 一行两个单词以上
+                        let wordLen = maxIndex - i 
+                        let _arr = []
+                        let len = 0 // 单词的宽度
+                        for (let j = i; j <= maxIndex; j++) {
+                            _arr.push(words[j])
+                            len += words[j].length
+                        }
+                        let spaceNum = maxWidth - len    // 空格的数量
+                        const spaceArr = Array(wordLen).fill('')    // 空格数组
+                        for (let j = 0; j < spaceNum; j++) {
+                            spaceArr[j % wordLen] += ' '
+                        }
+                        let val = [], flag = true
+                        while (_arr.length > 0) {   // 交替添加单词和空格
+                            flag ? val.push(_arr.shift()) : val.push(spaceArr.shift())
+                            flag = !flag
+                        }
+                        arr.push(val.join(''))
+                    }
+                }
+                i = maxIndex + 1
+            }
+            return arr
+        };
+    </script>
+</body>
+</html>
