@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 原因：
+    // JavaScript在运算的时候会把数字转换成二进制，
+
+    // 有一些浮点数在转换成二进制的时候，会出现无限循环
+
+    // 0.1 => 0.0001 1001 1001 1001…（无限循环）
+
+    // 0.2 => 0.0011 0011 0011 0011…（无限循环）
+
+    // 而存储结构中的尾数部分最多只能表示 53 位。为了能表示 0.1，
+
+    // 只能模仿十进制进行四舍五入了，但二进制只有 0 和 1 ， 于是变为 0 舍 1 入 。 
+
+    // 因此，0.1 在计算机里的二进制表示形式如下：
+
+    // 0.1 => 0.0001 1001 1001 1001 1001 1001 1001 1001 1001 1001 1001 1001 1001 101
+
+    // 0.2 => 0.0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 0011 001
+
+    // 用标准计数法表示如下：
+
+    // 0.1 => (−1)0 × 2^4 × (1.1001100110011001100110011001100110011001100110011010)2
+
+    // 0.2 => (−1)0 × 2^3 × (1.1001100110011001100110011001100110011001100110011010)2
+
+    // (−1)0 × 2−2 × (1.0011001100110011001100110011001100110011001100110100)2=>.0.30000000000000004
+
+    /**
+     * 解决方法
+    */
+    function handleAddPointNumber(num1 = 0, num2 = 0) {
+      let len1 = 0, len2 = 0, maxLen = 0
+      len1 = num1.toString().split('.')[1].length
+      len2 = num2.toString().split('.')[1].length
+      maxLen = Math.max(len1, len2)
+      if (maxLen === 0) {
+        return num1 + num2
+      }
+      let multiple = Math.pow(10, maxLen)
+      return (num1 * multiple + num2 * multiple) / multiple
+    }
+  </script>
+</body>
+
+</html>
