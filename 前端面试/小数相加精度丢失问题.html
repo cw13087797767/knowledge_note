@@ -39,6 +39,10 @@
 
     /**
      * 解决方法
+     * 思路：
+     * 1、求出最长小数的位数 multiple
+     * 2、两个数同时乘以multiple再相加
+     * 3、相加后处以multiple即可得到结果
     */
     function handleAddPointNumber(num1 = 0, num2 = 0) {
       let len1 = 0, len2 = 0, maxLen = 0
