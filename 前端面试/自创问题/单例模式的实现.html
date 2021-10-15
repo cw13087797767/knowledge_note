@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <script>
+      /** 
+       * 问题：
+       * 请编写一个方法，实现下列的需求
+       * 始终返回第一次创建的数据
+       * let d1 = new singleton("张三", 18)  // {name:"张三", age:18}
+       * let d2 = new singleton("李四", 20)  // {name:"张三", age:18}
+       * let d2 = new singleton("王五", 25)  // {name:"张三", age:18}
+      */
+      
+      let singleton = function(name, age) {
+        let instance = this
+        this.name = name
+        this.age = age
+        singleton = function() {
+          return instance
+        }
+
+      }
+    </script>
+</body>
+</html>

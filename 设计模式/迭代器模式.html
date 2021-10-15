@@ -1,60 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         var agg = (function () {
             let index = 0
-            let data = [1,2,3,4,5,6,7]
+            let data = [1, 2, 3, 4, 5, 6, 7]
             let len = data.length
             return {
-                next: function(){
+                next: function () {
                     if (!this.hasNext()) {
                         return null
                     }
                     return data[index++]
                 },
-                hasNext: function(){
+                hasNext: function () {
                     return index < len
                 },
-                reset:function(){
+                reset: function () {
                     index = 0
                 },
-                current:function(){
+                current: function () {
                     return index
                 }
             }
         })()
 
-        const iterator = function(arr) {
+        const iterator = function (arr) {
             if (!(arr instanceof Array)) {
                 throw `参数需为数组对象`
             }
             let index = 0
             let len = arr.length
             return {
-                next: function(){
+                next: function () {
                     if (!this.hasNext()) {
                         return null
                     }
                     return arr[index++]
                 },
-                hasNext: function(){
+                hasNext: function () {
                     return index < len
                 },
-                reset: function(){
+                reset: function () {
                     index = 0
                 },
-                current: function(){
+                current: function () {
                     return index
                 }
             }
         }
+
+
+        // 实现一个通用的迭代器
+        function Iterators(arr) {
+            if (!arr instanceof Array) {
+                throw `参数需为数组对象`
+            }
+            this.list = arr
+            this.index = 0
+            this.len = arr.length
+        }
+        Iterators.prototype.next = function () {
+            return this.list[this.index++]
+        }
+        Iterators.prototype.hasNext = function () {
+            return this.index < this.len
+        }
+        Iterators.prototype.reset = function () {
+            this.index = 0
+        }
+        Iterators.prototype.current = function () {
+            return this.index
+        }
+        Iterators.prototype.getAll = function () {
+            return this.list
+        }
+
     </script>
 </body>
+
 </html>
