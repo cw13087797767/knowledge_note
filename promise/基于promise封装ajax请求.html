@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const ajaxGet = (url) => {
+      return new Promise((resolve, reject) => {
+        const client = new XMLHttpRequest()
+        client.open('GET', url)
+        client.onreadystatechange = function() {
+          if (this.readyState !== 4) {
+            return 
+          }
+          if (this.status === 200) {
+            resolve(this.response)
+          } else {
+            reject(new Error(this.statusText))
+          }
+        }
+        client.responseType = 'json'
+        client.setRequestHeader('accept','application/json')
+        client.send()
+      })
+    }
+
+    ajaxGet('https://position.csdnimg.cn/oapi/get').then(res => {
+      console.log(res)
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script type="module">
+    /**
+     *  promise 链式调用
+    */
+    const func = () => {
+      new Promise((resolve, reject) => {
+        resolve('a')
+      }).then(res => {
+        console.log(res)
+        return new Promise(resolve => {
+          resolve('b')
+        })
+      }).then(res => {
+        console.log(res)
+        console.log('c')
+      })
+    }
+
+    class Promise2 {
+      callbacks = [];
+      state = 'pending'
+      value = null;
+
+      constructor(fn) {
+        console.log('constructor')
+        console.log(fn)
+        fn(this._resolve.bind(this))
+      }
+
+      then(onFulfilled) {
+        console.log('then')
+        console.log('onFulfilled', onFulfilled)
+        return new Promise2((resolve) => {
+          console.log('resolve', resolve)
+          this._handle({
+            onFulfilled: onFulfilled || null,
+            resolve: resolve
+          })
+        })
+      }
+
+      _handle(callback) {
+        console.log('_handle', callback)
+        if (this.state === 'pending') {
+          this.callbacks.push(callback)
+          return
+        }
+        //如果then中没有传递任何东西
+        if (!callback.onFulfilled) {
+          callback.resolve(this.value)
+          return
+        }
+        let ret = callback.onFulfilled(this.value)
+        console.log('ret', ret)
+        callback.resolve(ret)
+      }
+
+      _resolve(value) {
+        console.log('_resolve', value)
+        if (value && typeof value === 'object' || typeof value === 'function') {
+          let then = value.then
+          console.log('value.then', then)
+          if (typeof then === 'function') {
+            then.call(value, this._resolve.bind(this))
+            return
+          }
+        }
+        this.state = 'fulfilled'
+        this.value = value
+        this.callbacks.forEach(call => this._handle(call))
+      }
+    }
+
+    new Promise2(resolve => {
+      console.log(resolve)
+      console.log(1)
+      setTimeout(() => {
+        resolve(2)
+      });
+    }).then(res => {
+      console.log(res)
+      console.log(3)
+      return new Promise2(resolve => {
+        console.log(4)
+        setTimeout(() => {
+          resolve(5)
+        });
+      })
+    }).then(res => {
+      console.log(res)
+      console.log(6)
+    })
+
+
+  </script>
+</body>
+
+</html>
