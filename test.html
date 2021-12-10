@@ -8,7 +8,20 @@
 </head>
 <body>
     <script>
+        Function.prototype.my_bind = function(context){
+            let self = this;
+            console.log(arguments)
+            return function(){
+                console.log(context)
+                console.log(arguments)
+                self.apply(context, arguments)
+            }
+        }
 
+        function a (){
+            console.log(arguments)
+            console.log(this.name)
+        }
     </script>
 </body>
 </html>

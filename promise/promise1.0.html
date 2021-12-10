@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 参考文章地址：https://zhuanlan.zhihu.com/p/58428287?utm_source=wechat_timeline -->
+  <!-- <script type="module" src="./test.js"></script> -->
+
+  
+  <script type="module">
+    /** 
+     * promise原理（个人理解）
+     * 
+     * 1、在new promise的时候 传了一个回调方法，
+     *  在constructor中调用这个回调方法，
+     *  把 this._resolve.bind(this) 传递出去
+     * 2、在then方法执行时，会传递一个回调方法进来
+     *  判断此时state的状态，如果是pending状态，
+     *  则把这个回调方法添加进callbacks 数组当中
+     * 3、当 new promise传入的 resolve函数执行时，
+     *  会触发 _resolve 方法，并把值赋给value，
+     *  并执行callbacks的遍历方法，执行里面的回调行数，
+     *  里面的回调函数就是then方法传递进来的回调方法
+     * 
+    */
+
+    class Promise1 {
+      callbacks = [];
+      state = 'pending'//增加状态
+      value = null//保存结果
+      constructor(fn) {
+        console.log('constructor')
+        console.log(fn)
+        console.log(this._resolve.bind(this))
+        fn(this._resolve.bind(this))
+        setTimeout(() => {
+          console.log(this.callbacks)
+        });
+      }
+      then(onFulfilled) {
+        console.log('then')
+        console.log(this.state)
+        console.log(onFulfilled)
+        if (this.state === 'pending') {
+          this.callbacks.push(onFulfilled)
+        } else {
+          onFulfilled(this.value)
+        }
+        return this
+      }
+      _resolve(value) {
+        console.log('_resolve')
+        console.log(this)
+        this.state = 'fulfilled'
+        this.value = value
+        this.callbacks.forEach(fn => fn(value))
+      }
+    }
+
+    let p = new Promise1(resolve => {
+      console.log(resolve)
+      console.log('同步执行1')
+      setTimeout(() => {
+        console.log(111)
+        resolve('同步执行2')
+        console.log(222)
+      }, 1000);
+    }).then(res => {
+      console.log('then1', res)
+    })
+  </script>
+</body>
+
+</html>
