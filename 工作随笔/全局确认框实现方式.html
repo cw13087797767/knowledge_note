@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .global-confirm {
+      height: 0;
+      width: 0;
+      z-index: 2000;
+    }
+
+    .global-confirm-mask {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .global-confirm-body {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 200px;
+      max-width: 60%;
+      min-height: 150px;
+      max-height: 50%;
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .global-confirm-body-header {
+      height: 45px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .global-confirm-body-header>:nth-child(1) {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .global-confirm-body-header>:nth-child(2) {
+      font-size: 0;
+      display: block;
+    }
+
+    .global-confirm-body-header>:nth-child(2)::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: #FFF;
+      display: block;
+      transform: rotate(45deg);
+    }
+    .global-confirm-body-header>:nth-child(2)::after {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: #FFF;
+      display: block;
+      transform: rotate(-45deg);
+    }
+
+  </style>
+</head>
+
+<body>
+  <button onclick="showConfirm()">全局确认框</button>
+  <script>
+    const showConfirm = () => {
+      console.log('全局确认框')
+      const config = {
+        mask: true,
+        maskClose: true
+      }
+      createGlobalConfirm(config)
+    }
+
+    /**
+     * 创建全局确认框
+     * config 对象
+     * title: 标题文字
+     * message：内容文字
+     * cancelText: 取消按钮文字
+     * okText: 确认按钮文字
+     * showCancelBtn: 是否展示取消按钮
+     * showOkBtn: 是否展示确认按钮
+     * closeBtn: 是否展示右上角关闭按钮
+     * mask：是否展示遮罩功能
+     * maskClose：点击遮罩是否关闭确认框
+     * handleCancel：取消方法
+     * handleOk: 确认方法
+    */
+    function createGlobalConfirm(config = {}) {
+      const body = document.getElementsByTagName('body')[0]
+      if (!body) return
+      const {
+        title,
+        message,
+        cancelText,
+        okText,
+        showCancelBtn,
+        showOkBtn,
+        closeBtn,
+        mask,
+        maskClose,
+        handleCancel,
+        handleOk,
+      } = config
+      const dom = document.createElement('div')
+      dom.className = 'global-confirm'
+      if (mask) {
+        const maskDom = createMaskDom(maskClose, handleCancel)
+        dom.append(maskDom)
+      }
+      body.append(dom)
+    }
+
+    /** 
+     * 创建遮罩层
+     * maskClose：点击遮罩层是否关闭
+     * handleCancel：关闭回调方法
+    */
+    function createMaskDom(maskClose, handleCancel) {
+      const maskDom = document.createElement('div')
+      maskDom.className = 'global-confirm-mask'
+      if (maskClose) {
+        maskDom.onclick = () => closeGlobalConfirm(handleCancel)
+      }
+      return maskDom
+    }
+
+    /** 
+     * 创建确认框内部主体
+    */
+    function createConfirmBody(title, message) {
+      const confirmBodyDom = document.createElement('div')
+      confirmBodyDom.className = 'global-confirm-body'
+      const headerDom = document.createElement('div')
+      headerDom.className = 'global-confirm-body-header'
+      const titleDom = document.createElement('span')
+      titleDom.innerHTML = title || '提醒'
+      
+    }
+
+    /** 
+     * 关闭确认框
+     * fn：关闭时触发的回调方法
+    */
+    function closeGlobalConfirm(fn) {
+      const dom = document.getElementsByClassName('global-confirm')[0]
+      if (!dom) return
+      dom.remove()
+      fn && fn()
+    }
+  </script>
+</body>
+
+</html>
