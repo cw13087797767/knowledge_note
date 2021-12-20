@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 给你一个字符串 s ，仅反转字符串中的所有元音字母，并返回结果字符串。
+
+    // 元音字母包括 'a'、'e'、'i'、'o'、'u'，且可能以大小写两种形式出现。
+
+    //  
+
+    // 示例 1：
+
+    // 输入：s = "hello"
+    // 输出："holle"
+    // 示例 2：
+
+    // 输入：s = "leetcode"
+    // 输出："leotcede"
+    //  
+
+    // 提示：
+
+    // 1 <= s.length <= 3 * 105
+    // s 由 可打印的 ASCII 字符组成
+
+    // 来源：力扣（LeetCode）
+    // 链接：https://leetcode-cn.com/problems/reverse-vowels-of-a-string
+    // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+    /**
+     * @param {string} s
+     * @return {string}
+     */
+    var reverseVowels = function (s) {
+      const queue = [], stack = []
+      for (let i = 0; i < s.length; i++) {
+        switch (s[i]) {
+          case 'a':
+          case 'e':
+          case 'i':
+          case 'o':
+          case 'u':
+          case 'A':
+          case 'E':
+          case 'I':
+          case 'O':
+          case 'U':
+            stack.push(s[i])
+            queue.push('$')
+            break;
+          default:
+            queue.push(s[i])
+            break;
+        }
+      }
+      let newS = ''
+      for (let i = 0; i < queue.length; i++) {
+        newS += queue[i] === '$' ? stack.pop() : queue[i]
+      }
+      return newS
+    };
+
+    var reverseVowels2 = s => {
+      let arr = [], newS = s.split('')
+      for (let i = 0; i < s.length; i++) {
+        if (isVowel(s[i])) {
+          arr.push(s[i])
+        }
+      }
+      for (let i = 0; i < newS.length; i++) {
+        if (isVowel(newS[i])) {
+          newS[i] = arr.pop()
+        }
+      }
+      return newS.join('')
+    }
+
+    const isVowel = str => {
+      return ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'].indexOf(str) > -1
+    }
+  </script>
+</body>
+
+</html>
