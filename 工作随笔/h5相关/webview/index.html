@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /** 
+     * bridge和原生交互
+     * 在项目中引入bridge.js文件
+     * 引入时第一次调用 setupWebViewJavascriptBridge 方法，进行初始化
+     * 
+     * 下面方法中有两个封装示例
+     * 1、window.native.handleShare 分享功能
+     * 通过callHandler来调用app的方法
+     * 
+     * 2、window.native.handleSensorChange 改变方向功能
+     * 通过registerHandler来注册一个方法给app调用，可能会执行多次，有多个cb
+     * 
+     * 
+     * 遇到的问题
+     * 再做公司项目的时候，有遇到一个问题，就是在引入这个bridge.js文件时，
+     * document.addEventListener("WebViewJavascriptBridgeReady",function () {);
+     * 这个方法一直无法注册成功
+     * 经排查是由于app在打开浏览器增加了页面监听的功能造成的堵塞，一直进不去
+     * app代码截图在同层级文件夹内可查看
+    */ 
+  </script>
+</body>
+</html>
