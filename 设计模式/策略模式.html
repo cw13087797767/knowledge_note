@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /** 
+     * 策略模式
+     * 在运行算法时，支持同一个接口来工作，从多个算法中选择特定的任务算法。
+     * 
+     * 以表单校验为例
+    */
+
+    const validator = {
+      // 所有可以用的检查
+      types: {},
+
+      // 错误消息
+      messages: [],
+
+      // 当前验证配置
+      // 名称: 检验类型
+      config: {
+
+      },
+
+      // 接口方法
+      validate: function (data) {
+        let key, msg, type, checker, result_ok;
+        this.messages = []
+        for (key in data) {
+          if (data.hasOwnProperty(key)) {
+            type = this.config[key];
+            checker = this.types[type]
+            if (!type) {
+              continue;
+            }
+            if (!checker) {
+              throw {
+                name: "validationError",
+                messages: "no handler to validate type" + type
+              }
+            }
+            result_ok = checker.validate(data[key])
+            if (!result_ok) {
+              msg = `invalid value for *${key}*,${checker.instructions}`
+              this.messages.push(msg)
+            }
+          }
+        }
+        return this.hasErrors()
+      },
+
+      hasErrors: function () {
+        return this.messages.length !== 0
+      }
+    }
+
+    // 添加校验类型
+    validator.types.isNonEmpty = {
+      validate: function (value) {
+        return !!value
+      },
+      instructions:"this value cannot be empty"
+    }
+
+    validator.types.isNumber = {
+      validate: function (value) {
+        return !isNaN(value)
+      },
+      instructions:"this value can only number"
+    }
+
+    validator.types.isAlphaNum = {
+      validate: function (value) {
+        return !/[^a-z0-9]/i.test(value)
+      },
+      instructions:"this value can only contain characters and numbers"
+    }
+
+    // 添加校验配置
+    validator.config.first_name = 'isNonEmpty'
+    validator.config.age = 'isNumber'
+    validator.config.username = 'isAlphaNum'
+
+    const data = {
+      first_name:"super",
+      last_name:"man",
+      age:88,
+      username:"0_O"
+    }
+
+    const error = validator.validate(data)
+    console.log(error)
+
+  </script>
+</body>
+
+</html>
