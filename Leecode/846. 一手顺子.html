@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // Alice 手中有一把牌，她想要重新排列这些牌，分成若干组，使每一组的牌数都是 groupSize ，并且由 groupSize 张连续的牌组成。
+
+    // 给你一个整数数组 hand 其中 hand[i] 是写在第 i 张牌，和一个整数 groupSize 。如果她可能重新排列这些牌，返回 true ；否则，返回 false 。
+
+    //  
+
+    // 示例 1：
+
+    // 输入：hand = [1,2,3,6,2,3,4,7,8], groupSize = 3
+    // 输出：true
+    // 解释：Alice 手中的牌可以被重新排列为 [1,2,3]，[2,3,4]，[6,7,8]。
+    // 示例 2：
+
+    // 输入：hand = [1,2,3,4,5], groupSize = 4
+    // 输出：false
+    // 解释：Alice 手中的牌无法被重新排列成几个大小为 4 的组。
+    //  
+
+    // 提示：
+
+    // 1 <= hand.length <= 104
+    // 0 <= hand[i] <= 109
+    // 1 <= groupSize <= hand.length
+    //  
+
+    // 来源：力扣（LeetCode）
+    // 链接：https://leetcode-cn.com/problems/hand-of-straights
+    // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+    /**
+    * @param {number[]} hand
+    * @param {number} groupSize
+    * @return {boolean}
+    */
+    var isNStraightHand = function (hand, groupSize) {
+      if (hand.length % groupSize !== 0) {
+        return false
+      }
+      const map = new Map()
+      let num = 0
+      for (let i = 0; i < hand.length; i++) {
+        map.set(hand[i], map.has(hand[i]) ? map.get(hand[i]) + 1 : 1)
+      }
+      const arr = Array.from(map.keys()).sort((a, b) => a - b)
+      while (arr.length > 0) {
+        let next = -1
+        for (let i = 0; i < groupSize; i++) {
+          num++
+          if (arr.length === 0) {
+            return false
+          }
+          if (i === 0) {
+            next = arr[0]
+            let total = map.get(next)
+            if (total === 1) {
+              map.delete(next)
+              arr.shift()
+            } else {
+              map.set(next, total - 1)
+            }
+          } else {
+            const _next = next + 1
+            const index = arr.indexOf(_next)
+            if (index === -1) {
+              return false
+            } else {
+              next = _next
+              let total = map.get(next)
+              if (total === 1) {
+                map.delete(next)
+                arr.splice(index, 1)
+              } else {
+                map.set(next, total - 1)
+              }
+            }
+          }
+        }
+      }
+      return num === hand.length
+    };
+
+    /**
+     * 官方题解
+     * @param {number[]} hand
+     * @param {number} groupSize
+     * @return {boolean}
+     */
+    var isNStraightHand = function (hand, groupSize) {
+        const n = hand.length;
+        if (n % groupSize !== 0) {
+            return false;
+        }
+        hand.sort((a, b) => a - b);
+        const cnt = new Map();
+        for (const x of hand) {
+            cnt.set(x, (cnt.get(x) || 0) + 1);
+        }
+        for (const x of hand) {
+            if (!cnt.has(x)) {
+                continue;
+            }
+            for (let j = 0; j < groupSize; j++) {
+                const num = x + j;
+                if (!cnt.has(num)) {
+                    return false;
+                }
+                cnt.set(num, cnt.get(num) - 1);
+                if (cnt.get(num) == 0) {
+                    cnt.delete(num);
+                }
+            }
+        }
+        return true;
+    };
+  </script>
+</body>
+
+</html>
