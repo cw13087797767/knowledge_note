@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /** 
+     * 订阅发布模式
+     * 核心思路：
+     * 1、发布者内部创建一个数组用于维护订阅者（存储的是订阅者的传递过来的方法）
+     * 2、当发布者执行对应的操作时，会触发发布的方法，遍历数组，将消息下发到对应的订阅者
+     * 
+    */
+
+
+    const publisher = {
+      subscribers: {
+        any: [], // 事件类型：订阅者
+      },
+      subscribe: function (fn, type) {
+        type = type || 'any'
+        if (typeof this.subscribers[type] === 'undefined') {
+          this.subscribers[type] = []
+        }
+        this.subscribers[type].push(fn)
+      },
+      unsubscribe: function (fn, type) {
+        this.visitSubscribers('unsubscribe', fn, type)
+      },
+      publish: function (publication, type) {
+        this.visitSubscribers('publish', publication, type)
+      },
+      visitSubscribers: function (action, arg, type) {
+        const subscriber = this.subscribers[type || 'any']
+        for (let i = 0; i < subscriber.length; i++) {
+          if (action === 'publish') {
+            subscriber[i](arg)
+          } else {
+            if (subscriber[i] === arg) {
+              subscriber.splice(i, 1)
+            }
+          }
+        }
+      }
+    }
+
+    /** 
+     * 将订阅发布的方法绑定到发布者身上
+    */
+    function makePublisher(obj) {
+      for (const key in publisher) {
+        if (Object.hasOwnProperty.call(publisher, key) && typeof publisher[key] === 'function') {
+          obj[key] = publisher[key]
+        }
+      }
+      obj.subscribers = {
+        any: []
+      }
+    }
+
+    const paper = {
+      daily: function(){
+        this.publish('big new today')
+      },
+      monthly: function(){
+        this.publish('interesting analysis', 'monthly')
+      }
+    }
+    makePublisher(paper)
+    const joe = {
+      drinkCoffee: function(paper){
+        console.log("just read " + paper)
+      },
+      sundayPreNap: function(monthly){
+        console.log('About to fall asleep reading this ' + monthly)
+      }
+    }
+    // Joe订阅paper，将触发后要执行的方法传递给paper
+    paper.subscribe(joe.drinkCoffee)
+    paper.subscribe(joe.sundayPreNap, 'monthly')
+
+    makePublisher(joe)
+    joe.tweet = function(msg){
+      this.publish(msg)
+    }
+
+    paper.readTweets = function(tweet){
+      console.log('Call big meeting! Someone ' + tweet)
+    }
+    joe.subscribe(paper.readTweets)
+  </script>
+</body>
+
+</html>
