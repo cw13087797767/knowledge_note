@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    单调栈就是栈里面存放的数据都是有序的，所以可以分为单调递增栈和单调递减栈两种。<br/>
+    单调递增栈就是从栈底到栈顶是从大到小<br/>
+    单调递减栈就是从栈底到栈顶是从小到大<br/>
+  </div>
+  参考地址：<a target="_blank" href="https://zhuanlan.zhihu.com/p/101785785">https://zhuanlan.zhihu.com/p/101785785</a>
+
+  <script>
+    // 给出一个矩形统计图，它的每个矩形的宽度都为1，高度是题目所给。要你求出这个矩形图中最大面积的长方形。
+    // 矩形统计图的数据为 [4, 3, 2, 5, 6]
+    const getArea = (arr = []) => {
+      let maxArea = 0
+      const stack = []
+      for (let i = 0; i < arr.length; i++) {
+        while (stack.length && arr[i] <= arr[stack.length - 1]) {
+          const j = stack.pop()
+          const k = !stack.length ? -1 : stack[stack.length - 1]
+          const curArea = (i - k - 1) * arr[j]
+          maxArea = Math.max(curArea, maxArea)
+        }
+        stack.push(i)
+        console.log(stack)
+      }
+      while (stack.length) {
+        const j = stack.pop()
+        const k = !stack.length ? -1 : stack[stack.length - 1]
+        const curArea = (arr.length - k - 1) * arr[j]
+        maxArea = Math.max(curArea, maxArea)
+        console.log(stack)
+      }
+      return maxArea
+    }
+  </script>
+</body>
+</html>

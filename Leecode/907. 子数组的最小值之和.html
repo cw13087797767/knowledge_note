@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 给定一个整数数组 arr，找到 min(b) 的总和，其中 b 的范围为 arr 的每个（连续）子数组。
+
+    // 由于答案可能很大，因此 返回答案模 10^9 + 7 。
+
+    //  
+
+    // 示例 1：
+
+    // 输入：arr = [3,1,2,4]
+    // 输出：17
+    // 解释：
+    // 子数组为 [3]，[1]，[2]，[4]，[3,1]，[1,2]，[2,4]，[3,1,2]，[1,2,4]，[3,1,2,4]。 
+    // 最小值为 3，1，2，4，1，1，2，1，1，1，和为 17。
+    // 示例 2：
+
+    // 输入：arr = [11,81,94,43,3]
+    // 输出：444
+    //  
+
+    // 提示：
+
+    // 1 <= arr.length <= 3 * 104
+    // 1 <= arr[i] <= 3 * 104
+
+    // 来源：力扣（LeetCode）
+    // 链接：https://leetcode-cn.com/problems/sum-of-subarray-minimums
+    // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+    /**
+     * 超时了！！！
+     * @param {number[]} arr
+     * @return {number}
+     */
+    var sumSubarrayMins = function (arr) {
+      console.time("")
+      const mod = 1e9 + 7
+      let ans = 0
+      for (let i = 0; i < arr.length; i++) {
+        let minVal = arr[i]
+        ans += arr[i]
+        for (let j = i + 1; j < arr.length; j++) {
+          minVal = Math.min(minVal, arr[j])
+          ans += minVal
+          ans %= mod
+        }
+      }
+      console.timeEnd("")
+      return ans
+    };
+
+    /**
+     * 官方题解
+     * @param {number[]} A
+     * @return {number}
+     */
+    var sumSubarrayMins = function (A) {
+      console.time("")
+      const mod = 1e9 + 7
+      let stack = []
+      let prev = []
+      for (let i = 0; i < A.length; i++) {
+        //这里的 A[stack[stack.length - 1]] >= A[i] 大于等于了，后面的就只能是大于了，不然会重复计算相等的值
+        while (stack.length !== 0 && A[stack[stack.length - 1]] >= A[i]) stack.pop()
+        prev[i] = stack.length ? stack[stack.length - 1] : -1
+        stack.push(i)
+      }
+      stack = []
+      let next = []
+      for (let i = A.length - 1; i >= 0; i--) {
+        while (stack.length !== 0 && A[stack[stack.length - 1]] > A[i]) stack.pop()
+        next[i] = stack.length ? stack[stack.length - 1] : A.length
+        stack.push(i)
+      }
+
+      let sum = 0
+      for (let i = 0; i < A.length; i++) {
+        sum += (i - prev[i]) * (next[i] - i) * A[i]
+        sum %= mod
+      }
+      console.timeEnd("")
+      return sum
+    };
+  </script>
+</body>
+
+</html>
