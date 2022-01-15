@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function ListNode(data, next) {
+            this.data = data
+            this.next = next
+        }
+        
+        // 尾插法
+        const createList = (arr = []) => {
+            const list = new ListNode(arr.shift(), null)
+            let r = list
+            while (arr.length > 0) {
+                const newList = new ListNode(arr.shift(), null)
+                r.next = newList
+                r = newList
+            }
+            return list
+        }
+        
+        // 递归尾插法
+        const createList2 = (arr = []) => {
+            return new ListNode(arr.shift(), arr.length > 0 ? createList2(arr) : null)
+        }
+
+        // 头插法
+        const createList3 = (arr = []) => {
+            const node = new ListNode(arr.pop(), null)
+            let list = node
+            while (arr.length > 0) {
+                list = new ListNode(arr.pop(), list)
+            }
+            return list
+        }
+
+    </script>
+</body>
+</html>
