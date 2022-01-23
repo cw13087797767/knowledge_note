@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 线性栈
+        function Stack(arr = []) {
+            this.list = [...arr]
+        }
+
+        Stack.prototype.add = function (elem) {
+            elem && this.list.push(elem)
+            return elem
+        }
+
+        Stack.prototype.get = function () {
+            if (this.list.length === 0) {
+                return undefined
+            }
+            return this.list.pop()
+        }
+
+        Stack.prototype.getLen = function () {
+            return this.list.length
+        }
+
+
+
+        // 链栈
+        function LinkStack(arr = []) {
+            this.link = null
+            for (let i = 0; i < arr.length; i++) {
+                this.link = new LinkList(arr[i], this.link)
+            }
+        }
+
+        function LinkList(item, next) {
+            this.data = item
+            this.next = next || null
+        }
+
+        LinkStack.prototype.add = function (elem) {
+            this.link = new LinkList(elem, this.link)
+        }
+
+        LinkStack.prototype.get = function () {
+            if (!this.link) {
+                return null
+            }
+            const elem = this.link.data
+            this.link = this.link.next
+            return elem
+        }
+    </script>
+</body>
+
+</html>

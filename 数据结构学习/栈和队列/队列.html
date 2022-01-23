@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 线性队列
+        function Queue(arr = []) {
+            this.list = [...arr]
+        }
+
+        Queue.prototype.add = function (elem) {
+            this.list.push(elem)
+        }
+
+        Queue.prototype.get = function () {
+            return this.list.shift()
+        }
+
+        Queue.prototype.getLen = function () {
+            return this.list.length
+        }
+
+        // 链表队列
+        function LinkQueue(arr = []) {
+            this.length = arr.length || 0
+            this.start = arr.length > 0 ? new LinkList(arr.shift()) : null
+            this.end = this.start
+            while (arr.length > 0) {
+                const linkNode = new LinkList(arr.shift())
+                this.end.next = linkNode
+                this.end = linkNode
+            }
+        }
+
+        function LinkList(item, next) {
+            this.data = item
+            this.next = next || null
+        }
+
+        LinkQueue.prototype.add = function (elem) {
+            if (this.end) {
+                const linkNode = new LinkList(elem)
+                this.end.next = linkNode
+                this.end = linkNode
+            } else {
+                this.start = new LinkList(elem)
+                this.end = this.start
+            }
+            this.length++
+        }
+
+        LinkQueue.prototype.get = function () {
+            if (this.start) {
+                const elem = this.start.data
+                this.start = this.start.next
+                this.length--
+                return elem
+            }
+            return null
+        }
+
+        LinkQueue.prototype.getLen = function () {
+            return this.length
+        }
+    </script>
+</body>
+
+</html>
