@@ -66,19 +66,19 @@
     }
 
     const paper = {
-      daily: function(){
+      daily: function () {
         this.publish('big new today')
       },
-      monthly: function(){
+      monthly: function () {
         this.publish('interesting analysis', 'monthly')
       }
     }
     makePublisher(paper)
     const joe = {
-      drinkCoffee: function(paper){
+      drinkCoffee: function (paper) {
         console.log("just read " + paper)
       },
-      sundayPreNap: function(monthly){
+      sundayPreNap: function (monthly) {
         console.log('About to fall asleep reading this ' + monthly)
       }
     }
@@ -87,14 +87,90 @@
     paper.subscribe(joe.sundayPreNap, 'monthly')
 
     makePublisher(joe)
-    joe.tweet = function(msg){
+    joe.tweet = function (msg) {
       this.publish(msg)
     }
 
-    paper.readTweets = function(tweet){
+    paper.readTweets = function (tweet) {
       console.log('Call big meeting! Someone ' + tweet)
     }
     joe.subscribe(paper.readTweets)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function Mom() {
+      this.actions = []
+      this.names = []
+      this.getUp = function () {
+        console.log("老妈起床了")
+        this.actions.forEach((func, index) => {
+          func(this.names[index])
+        })
+      }
+      this.subscription = function (name, func) {
+        this.names.push(name)
+        this.actions.push(func)
+      }
+      this.unSubscription = function (name) {
+        for (let i = 0; i < this.names.length; i++) {
+          if (this.names[i] === name) {
+            this.names.splice(i, 1)
+            this.actions.splice(i, 1)
+            break
+          }
+        }
+      }
+    }
+
+    const mom = new Mom()
+
+    const son1 = {
+      name: "张三",
+      eat: function (name) {
+        console.log(`叫${name}起床吃饭`)
+      },
+      addSubscription: function () {
+        console.log('老妈记得叫我起床吃饭')
+        mom.subscription(this.name, this.eat)
+      },
+      delSubscription: function () {
+        console.log('老妈不用叫我起床吃饭了')
+        mom.unSubscription(this.name)
+      }
+    }
+
+    const son2 = {
+      name: "李四",
+      play: function (name) {
+        console.log(`叫${name}出去玩`)
+      },
+      addSubscription: function () {
+        console.log('老妈记得叫我出去玩')
+        mom.subscription(this.name, this.play)
+      },
+      delSubscription: function () {
+        console.log('老妈不用叫我出去玩了')
+        mom.unSubscription(this.name)
+      }
+    }
+
+
   </script>
 </body>
 
