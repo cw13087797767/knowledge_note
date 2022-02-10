@@ -78,6 +78,7 @@
         nums.push(_head.val)
         _head = _head.next
       }
+      // 创建链表+数组存链表节点可以合在一起 少一次遍历
       let link = newLink(nums)
       const arr = []
       while (link) {
