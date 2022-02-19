@@ -9,42 +9,8 @@
 </head>
 
 <body>
-    <div id="test">0</div>
-    <button onclick="func2()">计算</button>
     <script>
-        var func = () => {
-            for (let i = 1; i <= 50; i++) {
-                compute()
-                document.getElementById('test').innerText = i
-            }
-        }
-
-        var compute = () => {
-            let str = 0
-            for (let i = 0; i < 100000000; i++) {
-                str += i
-            }
-        }
-
-        var func2 = () => {
-            compute2(1)
-        }
-
-        var compute2 = (i) => {
-            if (i > 50) return;
-            return new Promise((resolve, reject) => {
-                let str = 0
-                for (let i = 0; i < 100000000; i++) {
-                    str += i
-                }
-                document.getElementById('test').innerText = i
-                setTimeout(() => {
-                    resolve()
-                });
-            }).then(() => {
-                return compute2(i + 1)
-            })
-        }
+        // 参考地址： https://www.jianshu.com/p/77eaaf34e732
 
         let obj = {
             name: "小红",
