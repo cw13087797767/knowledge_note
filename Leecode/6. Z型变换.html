@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <script>
         // 将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。
@@ -70,41 +72,31 @@
         //     }
         //     return ans;
         // };
-        
+
         const convert = (s, numRows) => {
-            if (numRows === 1 || numRows === s.length) {
-                return s
-            }
-            const arr = []
-            for (let i = 0; i < numRows; i++) {
-                arr.push([])
-            }
+            if (numRows === 1 || numRows === s.length) return s
+            const arr = new Array(numRows).fill(0).map(() => []);
             let dir = true // true 向下  false向上
-            let i = 0, x = 0
-            while (i < s.length) {
-                if (dir) {
-                   arr[x].push(s[i])
-                   x++
-                   if (x >= numRows - 1) {
-                       dir = false
-                   } 
-                } else {
-                    arr[x].push(s[i])
-                    x--
-                    if (x <= 0) {
-                        dir = true
-                    }
-                }
-                i++
+            let x = 0, str = ''
+            const f1 = (item) => {
+                arr[x].push(item)
+                ++x >= numRows - 1 ? dir = false : null
             }
-            let str = ''
+            const f2 = (item) => {
+                arr[x].push(item)
+                --x <= 0 ? dir = true : null
+            }
+            for (const item of s) {
+                dir ? f1(item) : f2(item)
+            }
             for (let i = 0; i < arr.length; i++) {
                 str += arr[i].join("")
             }
             return str
         }
 
-        console.log(convert('PAYPALISHIRING',3))
+        console.log(convert('PAYPALISHIRING', 3))
     </script>
 </body>
+
 </html>
