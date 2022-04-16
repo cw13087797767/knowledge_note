@@ -1,0 +1,39 @@
+<!--
+ * @Description: 希尔排序
+ * @Date: 2022-04-15 14:42:07
+ * @LastEditors: cw
+ * @LastEditTime: 2022-04-15 14:48:53
+ * @FilePath: \knowledge_note\排序\希尔.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const sort = (arr = []) => {
+            let len = arr.length, temp, gap = 1
+            while (gap < len / 3) {
+                gap = gap * 3 + 1
+            }
+            for (gap; gap > 0; gap = Math.floor(gap / 3)) {
+                for (let i = gap; i < len; i++) {
+                    temp = arr[i]
+                    for (let j = i - gap; j > 0 && arr[j] > temp; j -= gap) {
+                        arr[j + gap] = arr[j]
+                    }
+                    arr[j + gap] = temp
+                }
+            }
+            return arr
+        }
+    </script>
+</body>
+
+</html>

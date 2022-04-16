@@ -1,0 +1,32 @@
+<!--
+ * @Description: 快排
+ * @Date: 2022-04-15 11:49:17
+ * @LastEditors: cw
+ * @LastEditTime: 2022-04-15 14:06:28
+ * @FilePath: \knowledge_note\排序\快排.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const quickSort = (arr = []) => {
+            if (arr.length <= 1) return arr
+            const left = [], right = [], p = arr.shift()
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] >= p) {
+                    right.push(arr[i])
+                } else {
+                    left.push(arr[i])
+                }
+            }
+            return quickSort(left).concat([p], quickSort(right))
+        }
+    </script>
+</body>
+</html>
