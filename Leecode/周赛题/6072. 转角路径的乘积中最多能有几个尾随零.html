@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给你一个二维整数数组 grid ，大小为 m x n，其中每个单元格都含一个正整数。
+
+        // 转角路径 定义为：包含至多一个弯的一组相邻单元。具体而言，路径应该完全 向水平方向 或者 向竖直方向 移动过弯（如果存在弯），而不能访问之前访问过的单元格。在过弯之后，路径应当完全朝 另一个 方向行进：如果之前是向水平方向，那么就应该变为向竖直方向；反之亦然。当然，同样不能访问之前已经访问过的单元格。
+
+        // 一条路径的 乘积 定义为：路径上所有值的乘积。
+
+        // 请你从 grid 中找出一条乘积中尾随零数目最多的转角路径，并返回该路径中尾随零的数目。
+
+        // 注意：
+
+        // 水平 移动是指向左或右移动。
+        // 竖直 移动是指向上或下移动。
+
+
+        // 示例 1：
+
+
+
+        // 输入：grid = [[23,17,15,3,20],[8,1,20,27,11],[9,4,6,2,21],[40,9,1,10,6],[22,7,4,5,3]]
+        // 输出：3
+        // 解释：左侧的图展示了一条有效的转角路径。
+        // 其乘积为 15 * 20 * 6 * 1 * 10 = 18000 ，共计 3 个尾随零。
+        // 可以证明在这条转角路径的乘积中尾随零数目最多。
+
+        // 中间的图不是一条有效的转角路径，因为它有不止一个弯。
+        // 右侧的图也不是一条有效的转角路径，因为它需要重复访问已经访问过的单元格。
+        // 示例 2：
+
+
+
+        // 输入：grid = [[4,3,2],[7,6,1],[8,8,8]]
+        // 输出：0
+        // 解释：网格如上图所示。
+        // 不存在乘积含尾随零的转角路径。
+
+
+        // 提示：
+
+        // m == grid.length
+        // n == grid[i].length
+        // 1 <= m, n <= 105
+        // 1 <= m * n <= 105
+        // 1 <= grid[i][j] <= 1000
+
+        /**
+         * @param {number[][]} grid
+         * @return {number}
+         */
+        var maxTrailingZeros = function (grid) {
+            // 提交的时候内存爆掉了 用了BigInt
+            let arr = [],
+                m = grid.length,
+                n = grid[0].length
+            const getGridCount = () => {
+                for (let i = 0; i <= m - 1; i++) {
+                    for (let j = 0; j < n - 1; j++) {
+                        for (let k = j + 1; k < n; k++) {
+                            // 横轴乘积
+                            let row = BigInt(1)
+                            for (let x = j; x <= k; x++) {
+                                row *= BigInt(grid[i][x])
+                            }
+                            // 左
+                            let len = arr.length
+                            arr[len] = [BigInt(row)]
+                            for (let y = i + 1; y < m; y++) {
+                                let _len = arr[len].length - 1
+                                arr[len].push(BigInt(arr[len][_len] * BigInt(grid[y][j])))
+                            }
+                            // 右
+                            len = arr.length
+                            arr[len] = [BigInt(row)]
+                            for (let y = i + 1; y < m; y++) {
+                                let _len = arr[len].length - 1
+                                arr[len].push(BigInt(arr[len][_len] * BigInt(grid[y][k])))
+                            }
+                        }
+                    }
+                }
+            }
+            if (n === 1) {
+                const _grid = grid.flat()
+                for (let i = 0; i < _grid.length - 1; i++) {
+                    for (let j = i + 1; j < _grid.length; j++) {
+                        let num = 1
+                        for (let x = i; x <= j; x++) {
+                            num *= _grid[x]
+                        }
+                        arr.push(BigInt(num))
+                    }
+                }
+            } else {
+                getGridCount()
+                grid.reverse()
+                getGridCount()
+            }
+            arr = arr.flat()
+            let ans = 0
+            for (let i = 0; i < arr.length; i++) {
+                let s = (arr[i] + ''),
+                    num = 0
+                for (let j = s.length - 1; j >= 0; j--) {
+                    if (s[j] === '0') {
+                        num++
+                    } else {
+                        ans = Math.max(num, ans)
+                        break
+                    }
+                }
+            }
+            return ans
+        };
+    </script>
+</body>
+
+</html>
