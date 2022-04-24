@@ -1,0 +1,71 @@
+<!--
+ * @Description: 
+ * @Date: 2022-04-24 18:28:23
+ * @LastEditors: cw
+ * @LastEditTime: 2022-04-24 18:28:23
+ * @FilePath: \knowledge_note\Leecode\42. 接雨水.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //         给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+        //  
+
+        //         示例 1：
+
+
+
+        //         输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+        //         输出：6
+        //         解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 
+        //         示例 2：
+
+        //         输入：height = [4,2,0,3,2,5]
+        //         输出：9
+        //          
+
+        //         提示：
+
+        //         n == height.length
+        //         1 <= n <= 2 * 104
+        //         0 <= height[i] <= 105
+
+        //         来源：力扣（LeetCode）
+        //         链接：https://leetcode-cn.com/problems/trapping-rain-water
+        //         著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        /**
+         * @param {number[]} height
+         * @return {number}
+         */
+        var trap = function (arr) {
+            if (arr.length < 3) return 0
+            let ans = 0
+            const stack = []
+            for (let i = 0; i < arr.length; i++) {
+                while (stack.length && arr[i] > arr[stack[0]]) {
+                    const top = stack.shift()
+                    if (!stack.length) break
+                    const left = stack[0]
+                    const height = Math.min(arr[i], arr[left]) - arr[top]
+                    const widht = i - left - 1
+                    ans += height * widht
+                }
+                stack.unshift(i)
+            }
+            return ans
+        };
+    </script>
+</body>
+
+</html>
