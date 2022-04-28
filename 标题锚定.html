@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>css固定</title>
+    <style>
+        .ele {
+            position: -webkit-sticky; /* Safari */
+            position: sticky;
+            top: -1px;
+            background-color: green;
+            transition: all cubic-bezier(.63,.36,.36,.63) 0.5s;
+        }
+        .ele.is-pinned {
+            background-color: rgb(14, 176, 14);
+            font-size: 35px;
+        }
+    </style>
+</head>
+<body>
+<h2 class="ele">position: static;</h2>
+<div>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>    <h1>内容</h1>
+
+</div>
+    <script>
+        const el = document.querySelector('.ele')
+        const observer = new IntersectionObserver(
+            ([e]) => e.target.classList.toggle(
+                'is-pinned',
+                e.intersectionRatio < 1
+            ),
+            {
+                threshold: [1]
+            }
+        )
+        observer.observe(el)
+        // setTimeout(() => {
+        //     observer.unobserve(el)
+        // }, 5000);
+    </script>
+</body>
+</html>
