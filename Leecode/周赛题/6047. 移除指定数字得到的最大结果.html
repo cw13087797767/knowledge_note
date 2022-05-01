@@ -52,20 +52,12 @@
             for (let i = 0; i < number.length; i++) {
                 if (number[i] === digit) {
                     let numStr = number.substring(0, i) + number.substring(i + 1)
-                    debugger
-                    for (let j = 0; j < numStr.length; j++) {
-                        if (+numStr[j] === (+ans[j] || 0)) {
-                            continue
-                        } else if (+numStr[j] > (+ans[j] || 0)) {
-                            ans = numStr
-                            break
-                        } else {
-                            break
-                        }
+                    if (BigInt(numStr) > BigInt(ans)) {
+                        ans = numStr
                     }
                 }
             }
-            return ans.toString()
+            return ans
         };
     </script>
 </body>
