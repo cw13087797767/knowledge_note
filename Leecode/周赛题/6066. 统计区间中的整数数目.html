@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给你区间的 空 集，请你设计并实现满足要求的数据结构：
+
+        // 新增：添加一个区间到这个区间集合中。
+        // 统计：计算出现在 至少一个 区间中的整数个数。
+        // 实现 CountIntervals 类：
+
+        // CountIntervals() 使用区间的空集初始化对象
+        // void add(int left, int right) 添加区间 [left, right] 到区间集合之中。
+        // int count() 返回出现在 至少一个 区间中的整数个数。
+        // 注意：区间 [left, right] 表示满足 left <= x <= right 的所有整数 x 。
+
+
+
+        // 示例 1：
+
+        // 输入
+        // ["CountIntervals", "add", "add", "count", "add", "count"]
+        // [[], [2, 3], [7, 10], [], [5, 8], []]
+        // 输出
+        // [null, null, null, 6, null, 8]
+
+        // 解释
+        // CountIntervals countIntervals = new CountIntervals(); // 用一个区间空集初始化对象
+        // countIntervals.add(2, 3);  // 将 [2, 3] 添加到区间集合中
+        // countIntervals.add(7, 10); // 将 [7, 10] 添加到区间集合中
+        // countIntervals.count();    // 返回 6
+        //                         // 整数 2 和 3 出现在区间 [2, 3] 中
+        //                         // 整数 7、8、9、10 出现在区间 [7, 10] 中
+        // countIntervals.add(5, 8);  // 将 [5, 8] 添加到区间集合中
+        // countIntervals.count();    // 返回 8
+        //                         // 整数 2 和 3 出现在区间 [2, 3] 中
+        //                         // 整数 5 和 6 出现在区间 [5, 8] 中
+        //                         // 整数 7 和 8 出现在区间 [5, 8] 和区间 [7, 10] 中
+        //                         // 整数 9 和 10 出现在区间 [7, 10] 中
+
+
+        // 提示：
+
+        // 1 <= left <= right <= 109
+        // 最多调用  add 和 count 方法 总计 105 次
+        // 调用 count 方法至少一次
+        // https://leetcode.cn/contest/weekly-contest-293/problems/count-integers-in-intervals/
+
+
+        var CountIntervals = function () {
+            this.arr = []
+        };
+
+        /** 
+         * @param {number} left 
+         * @param {number} right
+         * @return {void}
+         */
+        CountIntervals.prototype.add = function (left, right) {
+            // 添加新区间
+            let flag = false
+            for (let i = 0; i < this.arr.length; i++) {
+                if (
+                    (left >= this.arr[i][0] - 1 && left <= this.arr[i][1] + 1) ||
+                    (right >= this.arr[i][0] - 1 && right <= this.arr[i][1] + 1) ||
+                    left <= this.arr[i][0] && right >= this.arr[i][1] ||
+                    left >= this.arr[i][0] && right <= this.arr[i][i]
+                ) {
+                    this.arr[i][0] = Math.min(left, this.arr[i][0])
+                    this.arr[i][1] = Math.max(right, this.arr[i][1])
+                    flag = true
+                    break
+                }
+            }
+            if (!flag) {
+                this.arr.push([left, right])
+            }
+            // 原有区间合并
+            let index = 0
+            while (index < this.arr.length) {
+                for (let i = this.arr.length - 1; i > index; i--) {
+                    const [left, right] = this.arr[i]
+                    if (
+                        (left >= this.arr[index][0] - 1 && left <= this.arr[index][1] + 1) ||
+                        (right >= this.arr[index][0] - 1 && right <= this.arr[index][1] + 1) ||
+                        left <= this.arr[index][0] && right >= this.arr[index][1] ||
+                        left >= this.arr[index][0] && right <= this.arr[index][i]
+                    ) {
+                        this.arr[index][0] = Math.min(left, this.arr[index][0])
+                        this.arr[index][1] = Math.max(right, this.arr[index][1])
+                        this.arr.splice(i, 1)
+                    }
+                }
+                index++
+            }
+        };
+
+        /**
+         * @return {number}
+         */
+        CountIntervals.prototype.count = function () {
+            let ans = 0
+            for (let i = 0; i < this.arr.length; i++) {
+                ans += this.arr[i][1] - this.arr[i][0] + 1
+            }
+            return ans
+        };
+
+        /**
+         * Your CountIntervals object will be instantiated and called as such:
+         * var obj = new CountIntervals()
+         * obj.add(left,right)
+         * var param_2 = obj.count()
+         */
+
+        const fn = (arr1 = [], arr2 = []) => {
+            const arr = []
+            let a = null
+            for (let i = 0; i < arr1.length; i++) {
+                switch (arr1[i]) {
+                    case 'CountIntervals':
+                        a = new CountIntervals()
+                        arr.push(null)
+                        break;
+                    case 'add':
+                        a.add(arr2[i][0], arr2[i][1])
+                        arr.push(null)
+                        break
+                    case 'count':
+                        // console.log('index:', i, '结果：', a.count())
+                        arr.push(a.count())
+                    default:
+                        break;
+                }
+                console.log('index: ', i, '入参：', JSON.stringify(arr2[i]), '结果:', JSON.stringify(a.arr))
+            }
+            return arr
+        }
+        let arr1 = ["CountIntervals", "add", "add", "add", "count", "count", "count", "add", "add", "add", "count",
+            "add", "count", "add", "count", "count", "count", "count", "count", "add", "add", "add", "add", "count",
+            "add", "count", "add", "count", "count", "add", "count", "count", "add", "count", "count", "count",
+            "add", "add", "add", "count", "add", "add", "add", "add", "count", "add", "count", "count", "add",
+            "add", "add", "add", "add", "count", "count", "add", "add", "count", "count", "count", "add", "add",
+            "add", "add", "count", "add", "add", "add", "count", "count", "count", "count", "add", "count", "count",
+            "add", "add", "count", "add", "count", "count", "add", "add", "count", "add", "add", "add", "count",
+            "add", "add", "add", "add", "count", "count", "count", "add", "count", "add", "add", "count", "add",
+            "add", "count", "add", "add", "add", "count", "add", "add", "add", "count", "count", "count", "add",
+            "count", "add", "add", "add", "count", "add", "count", "count", "count", "add", "count", "count",
+            "count", "add", "count", "count", "add", "count", "add"
+        ]
+        let arr2 = [
+            [],
+            [365, 897],
+            [261, 627],
+            [781, 884],
+            [],
+            [],
+            [],
+            [328, 495],
+            [224, 925],
+            [228, 464],
+            [],
+            [416, 451],
+            [],
+            [747, 749],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [740, 757],
+            [51, 552],
+            [20, 896],
+            [459, 712],
+            [],
+            [383, 670],
+            [],
+            [701, 924],
+            [],
+            [],
+            [392, 591],
+            [],
+            [],
+            [935, 994],
+            [],
+            [],
+            [],
+            [398, 525],
+            [335, 881],
+            [243, 517],
+            [],
+            [995, 1000],
+            [15, 335],
+            [430, 490],
+            [376, 681],
+            [],
+            [733, 841],
+            [],
+            [],
+            [603, 633],
+            [974, 978],
+            [466, 786],
+            [241, 753],
+            [259, 887],
+            [],
+            [],
+            [410, 514],
+            [173, 300],
+            [],
+            [],
+            [],
+            [805, 957],
+            [272, 805],
+            [723, 858],
+            [113, 118],
+            [],
+            [426, 987],
+            [318, 997],
+            [741, 978],
+            [],
+            [],
+            [],
+            [],
+            [701, 992],
+            [],
+            [],
+            [562, 766],
+            [987, 1000],
+            [],
+            [929, 929],
+            [],
+            [],
+            [926, 931],
+            [913, 975],
+            [],
+            [930, 962],
+            [707, 914],
+            [688, 757],
+            [],
+            [430, 433],
+            [452, 683],
+            [794, 919],
+            [799, 991],
+            [],
+            [],
+            [],
+            [658, 731],
+            [],
+            [328, 686],
+            [998, 999],
+            [],
+            [455, 938],
+            [981, 988],
+            [],
+            [92, 699],
+            [311, 690],
+            [916, 920],
+            [],
+            [213, 339],
+            [605, 961],
+            [719, 902],
+            [],
+            [],
+            [],
+            [129, 833],
+            [],
+            [844, 926],
+            [940, 956],
+            [148, 182],
+            [],
+            [163, 885],
+            [],
+            [],
+            [],
+            [532, 886],
+            [],
+            [],
+            [],
+            [306, 906],
+            [],
+            [],
+            [948, 963],
+            [],
+            [116, 853]
+        ]
+    </script>
+</body>
+
+</html>
