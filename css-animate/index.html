@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #app {
+            display: flex;
+            height: 100%;
+        }
+        .list-ctn{
+            height: 100%;
+            overflow: auto;
+        }
+        .iframe-ctn{
+            flex: 1;
+        }
+        iframe {
+            height: 100%;
+            width: 100%;
+        }
+        li {
+            cursor: pointer;
+            line-height: 40px;
+            transition: all 0.3s ease-in-out;
+        }
+        li:hover {
+            background-color: rgba(0,0,0,0.3);
+        }
+        .active {
+            background-color: rgba(0,0,0,0.4);
+        }
+    </style>
+    <script src="../vue2.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="list-ctn">
+            <ul>
+                <li v-for="item in fileList" :key="item" @click="handleClick(item)" :class="{active: item === activeKey}">
+                    {{ item }}
+                </li>
+            </ul>
+        </div>
+        <div class="iframe-ctn">
+            <iframe :src="'./examples/' + activeKey + '/index.html'" frameborder="0"></iframe>
+        </div>
+    </div>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                fileList: [
+                    "001-button-text-staggered-sliding-effects",
+                    "002-rectangular-rotating-loader-animation",
+                    "003-diagonal-stripe-border-effects",
+                    "004-metallic-glossy-3d-button-effects",
+                    "005-sleek-sliding-toggle-checkbox",
+                    "006-blue-dazzling-diamond",
+                    "007-3d-text-marquee-effects",
+                    "008-charging-loader-animation",
+                    "009-aimed-button-effects",
+                    "010-concentric-arc-rotating-loader-animation",
+                    "011-ripple-pulse-loader-animation",
+                    "012-broken-text-effects",
+                    "013-hot-coffee-cup",
+                    "014-three-languages-for-web-development",
+                    "015-development-skills-card",
+                    "016-colorful-gradient-animated-border",
+                    "017-swapping-colors-loader-animation",
+                    "018-stroke-morphing-404-effects",
+                    "019-split-text-menu-effects",
+                    "020-pixel-animation-heart-shape",
+                    "021-a-text-sliding-effect-ui",
+                    "022-stripy-rainbow-text-effects",
+                    "023-reverse-text-color-menu-effects",
+                    "024-waves",
+                    "025-comet-rotating-loader",
+                    "026-set-off-paper-button-effects",
+                    "027-rainbow-loader",
+                    "028-penrose-triangle",
+                    "029-marquee-slash-animation",
+                    "030-swinging-signboard-effects",
+                    "031-minimalist-ping-pong-animation",
+                    "032-hexagonal-button-effects",
+                    "033-milk-text-effect",
+                    "034-box-border-stacking-effect",
+                    "035-panda",
+                    "036-solar-eclipse",
+                    "037-stroke-animation-button-effect",
+                    "038-stairs-lettering-effect",
+                    "039-stripe-rainbow-heart",
+                    "040-notebook-page-flip-animation",
+                    "041-pencil",
+                    "042-equalizer-loader",
+                    "043-vue-logo",
+                    "044-background-transition-button-effect",
+                    "045-colorful-rhombus-loader",
+                    "046-bounced-ball-effect",
+                    "047-butterfly-specimen",
+                    "048-mosquito-coil",
+                    "049-ice-lolly",
+                    "050-newtons-cradle",
+                    "051-radar-scanning",
+                    "052-ring-and-spheres-animation",
+                    "053-text-fade-loader",
+                    "054-chessboard",
+                    "055-sun-earth-and-moon-model",
+                    "056-a-programmers-life",
+                    "057-eyes-in-the-dark",
+                    "058-parrot",
+                    "059-rainbow-background-text",
+                    "060-lego-brick",
+                    "061-coffee-pot",
+                    "062-steamer",
+                    "063-toaster",
+                    "064-soccer-field",
+                    "065-swaying-loader",
+                    "066-coffee-machine",
+                    "067-lattice-dots-loader",
+                    "068-color-cards",
+                    "069-throw-the-box",
+                    "070-wandered-jelly-monster",
+                    "071-8-shaped-dancing-loader",
+                    "072-bubble-coloring-button",
+                    "073-fox",
+                    "074-macbook-pro",
+                    "075-candle",
+                    "076-hey-take-it-easy",
+                    "077-wavy-flag",
+                    "078-windows-boot-screen",
+                    "079-mcdonalds",
+                    "080-bicycle-wheel",
+                    "081-swapping-colors-rotating-animation",
+                    "082-bouncing-letter-i",
+                    "083-a-ball-climbing-the-stairs",
+                    "084-need-for-speed-loader",
+                    "085-bouncing-ball",
+                    "086-rotating-squares",
+                    "087-refrigerator",
+                    "088-burning-flame",
+                    "089-spiral-arms-particles-animation",
+                    "090-endless-hexagonal-space",
+                    "091-train-loader",
+                    "092-saturn",
+                    "093-lightning-cable",
+                    "094-polaroid-camera",
+                    "095-rotating-worm",
+                    "096-spacecraft",
+                    "097-swagger-dots",
+                    "098-pig-in-angry-birds",
+                    "099-roller-coaster-loader",
+                    "100-shimmering-neon-text",
+                    "101-pendulums",
+                    "102-little-buddha",
+                    "103-surveillance-eye",
+                    "104-truck-loader",
+                    "105-moon-rabbit",
+                    "106-animation-with-no-dom",
+                    "107-monocular-monster",
+                    "108-black-and-white-overlap-animation",
+                    "109-say-love-in-different-languages",
+                    "110-black-bomb-in-angry-birds",
+                    "111-a-simple-duck",
+                    "112-button-hover-effect",
+                    "113-racing-car-loader",
+                    "114-mix-color-loader",
+                    "115-lights-with-pi-digits",
+                    "116-online-status-detector",
+                    "117-red-anger-in-angry-birds",
+                    "118-hourglass-loader",
+                    "119-draught-beer",
+                    "120-tin-foil-cuted-effect",
+                    "121-fishes-swimming",
+                    "122-apple-photos-icon",
+                    "123-biplane",
+                    "124-origami-cranes",
+                    "125-a-walking-sad-man",
+                    "126-button-hover-effect",
+                    "127-circle-illusion",
+                    "128-the-goddess-is-coming",
+                    "129-stripe-illusion",
+                    "130-google-googol",
+                    "131-scissors",
+                    "132-thinking-hand",
+                    "133-continuous-animation-with-gsap",
+                    "134-sapling-loader",
+                    "135-button-hover-effect",
+                    "136-colorful-bar-loader",
+                    "137-abstract-water-wave-animation",
+                    "138-iphone-price-comparison-chart",
+                    "139-glowing-particles-animation",
+                    "140-text-fade-in-effect",
+                    "141-puppy-stamp",
+                    "142-rooster-stamp",
+                    "143-squirrel-stamp",
+                    "144-pattern-animation",
+                    "145-power-switch",
+                    "146-pulsation-loader",
+                    "147-perspective-button-hover-effect",
+                    "148-button-hover-effect",
+                    "149-polo-mints-animation",
+                    "150-pattern-animation",
+                    "151-baymax",
+                    "152-black-dots-illusion",
+                    "153-emoji-tooltips",
+                    "154-giddy-animation",
+                    "155-balloon",
+                    "156-airplane-window-toggle",
+                    "157-chessboard-illusion",
+                    "158-umbrella-toggle",
+                    "159-apple-devices-slide-show",
+                    "160-opening-popup-animation"
+                ],
+                activeKey: ''
+            },
+            created () {
+                this.activeKey = this.fileList[0]
+            },
+            methods: {
+                handleClick (key) {
+                    this.activeKey = key
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
