@@ -3,13 +3,15 @@
  * @param img 图片对象
  */
 export function compress(img, height, width, callback) {
-    let canvas = document.createElement('canvas')
-    let context = canvas.getContext('2d')
-    canvas.width = width
-    canvas.height = height
-    context.clearRect(0, 0, width, height)
-    context.drawImage(img, 0, 0, width, height)
-    callback(canvas.toDataURL('image/jpeg', 0.75))
+    return new Promise((resolve, reject) => {
+        let canvas = document.createElement('canvas')
+        let context = canvas.getContext('2d')
+        canvas.width = width
+        canvas.height = height
+        context.clearRect(0, 0, width, height)
+        context.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', 0.75))
+    })
 }
 
 /**
