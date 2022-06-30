@@ -32,3 +32,23 @@ export const base64ToFile = (base64, name) => {
         type: fileType
     })
 }
+
+/**
+ * 下载二进制文件
+ * @param {Object}
+ *  @param {Binary} 二进制文件
+ *  @param {Binary} 下载文件名
+ *  @param {Binary} 文件类型
+ */
+export const downloadBinaryFile = function ({ data, name, type }) {
+    const blob = new Blob([data], { type })
+    const URL = window.URL
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = name
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+}
