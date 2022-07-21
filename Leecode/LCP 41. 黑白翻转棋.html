@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 在 n*m 大小的棋盘中，有黑白两种棋子，黑棋记作字母 "X", 白棋记作字母 "O"，空余位置记作 "."。当落下的棋子与其他相同颜色的棋子在行、列或对角线完全包围（中间不存在空白位置）另一种颜色的棋子，则可以翻转这些棋子的颜色。
+
+        // 「力扣挑战赛」黑白翻转棋项目中，将提供给选手一个未形成可翻转棋子的棋盘残局，其状态记作 chessboard。若下一步可放置一枚黑棋，请问选手最多能翻转多少枚白棋。
+
+        // 注意：
+
+        // 若翻转白棋成黑棋后，棋盘上仍存在可以翻转的白棋，将可以 继续 翻转白棋
+        // 输入数据保证初始棋盘状态无可以翻转的棋子且存在空余位置
+        // 示例 1：
+
+        // 输入：chessboard = ["....X.","....X.","XOOO..","......","......"]
+
+        // 输出：3
+
+        // 解释：
+        // 可以选择下在 [2,4] 处，能够翻转白方三枚棋子。
+
+        // 示例 2：
+
+        // 输入：chessboard = [".X.",".O.","XO."]
+
+        // 输出：2
+
+        // 解释：
+        // 可以选择下在 [2,2] 处，能够翻转白方两枚棋子。
+
+
+        // 示例 3：
+
+        // 输入：chessboard = [".......",".......",".......","X......",".O.....","..O....","....OOX"]
+
+        // 输出：4
+
+        // 解释：
+        // 可以选择下在 [6,3] 处，能够翻转白方四枚棋子。
+
+
+        // 提示：
+
+        // 1 <= chessboard.length, chessboard[i].length <= 8
+        // chessboard[i] 仅包含 "."、"O" 和 "X"
+
+        // 来源：力扣（LeetCode）
+        // 链接：https://leetcode.cn/problems/fHi6rV
+        // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        /**
+         * @param {string[]} chessboard
+         * @return {number}
+         */
+        var flipChess = function (chessboard) {
+            // 解法不对
+            let ans = 0
+            const col = chessboard.length
+            const row = chessboard[0].length
+            for (let i = 0; i < col; i++) {
+                for (let j = 0; j < row; j++) {
+                    let total = 0
+                    if (chessboard[i][j] === '.') {
+                        // 水平左
+                        total += getCount(1, i, j, chessboard, col, row)
+                        // 水平右
+                        total += getCount(2, i, j, chessboard, col, row)
+                        // 竖直上
+                        total += getCount(3, i, j, chessboard, col, row)
+                        // 竖直下
+                        total += getCount(4, i, j, chessboard, col, row)
+                        // 左上
+                        total += getCount(5, i, j, chessboard, col, row)
+                        // 右上
+                        total += getCount(6, i, j, chessboard, col, row)
+                        // 左下
+                        total += getCount(7, i, j, chessboard, col, row)
+                        // 右下
+                        total += getCount(8, i, j, chessboard, col, row)
+                    }
+                    console.log(i, j, total)
+                    ans = Math.max(total, ans)
+                }
+            }
+            return ans
+        };
+
+        const getCount = (type, i, j, chessboard, col, row) => {
+            let count = 0
+            while (true) {
+                switch (type) {
+                    case 1: // 水平左
+                        j--
+                        break; 
+                    case 2: // 水平右
+                        j++
+                        break;
+                    case 3: // 竖直上
+                        i--
+                        break;
+                    case 4: // 竖直下
+                        i++
+                        break;
+                    case 5: // 左上
+                        i--
+                        j--
+                        break;
+                    case 6: // 右上
+                        j++
+                        i--
+                        break;
+                    case 7: // 左下
+                        i++
+                        j--
+                        break;
+                    case 8: // 右下
+                        i++
+                        j++
+                        break;
+                    default:
+                        break;
+                }
+                if (
+                    i < 0
+                    || j < 0
+                    || i >= col
+                    || j >= row
+                    || !chessboard[i][j]
+                    || chessboard[i][j] === 'X'
+                    || chessboard[i][j] === '.'
+                ) {
+                    return count
+                }
+                count++
+            }
+            return count
+        }
+    </script>
+</body>
+
+</html>

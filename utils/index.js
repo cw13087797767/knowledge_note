@@ -2,7 +2,7 @@
  * 图片压缩
  * @param img 图片对象
  */
-export function compress(img, height, width, callback) {
+export function compress(img, height, width) {
     return new Promise((resolve, reject) => {
         let canvas = document.createElement('canvas')
         let context = canvas.getContext('2d')
