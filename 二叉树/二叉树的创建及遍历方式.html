@@ -119,7 +119,20 @@
                 }
             }
             return arr
-        }
+        };
+
+        // 二叉树拷贝
+        const cloneTree = (tree) => {
+            let newTree = null
+            const clone = (tree) => {
+                if (tree) {
+                    newTree = new BinTree(tree.val)
+                    newTree.left = clone(tree.left)
+                    newTree.right = clone(tree.right)
+                }
+            }
+            return newTree
+        };
 
     </script>
 </body>

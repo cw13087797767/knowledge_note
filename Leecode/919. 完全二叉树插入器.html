@@ -78,8 +78,8 @@
                 if (node.right) {
                     queue.push(node.right)
                 }
-                if (!node.left && !node.right) {
-                    this.candidate.push(node)
+                if (!(node.left && node.right)) {
+                    this.candidate.push(node);
                 }
             }
         };
