@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 实现一个MyQueue类，该类用两个栈来实现一个队列。
+
+
+        // 示例：
+
+        // MyQueue queue = new MyQueue();
+
+        // queue.push(1);
+        // queue.push(2);
+        // queue.peek();  // 返回 1
+        // queue.pop();   // 返回 1
+        // queue.empty(); // 返回 false
+
+        // 说明：
+
+        // 你只能使用标准的栈操作 -- 也就是只有 push to top, peek/pop from top, size 和 is empty 操作是合法的。
+        // 你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。
+        // 假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）。
+
+        // 来源：力扣（LeetCode）
+        // 链接：https://leetcode.cn/problems/implement-queue-using-stacks-lcci
+        // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        var Stack = function () {
+            this.list = []
+        }
+
+        Stack.prototype.add = function (val) {
+            this.list.push(val)
+        }
+
+        Stack.prototype.get = function () {
+            return this.list.pop()
+        }
+
+
+        /**
+         * Initialize your data structure here.
+         */
+        var MyQueue = function() {
+            this.stack1 = new Stack()
+            this.stack2 = new Stack()
+            this.len = 0
+            this.peekEl = undefined
+        };
+
+        /**
+         * Push element x to the back of queue. 
+         * @param {number} x
+         * @return {void}
+         */
+        MyQueue.prototype.push = function(x) {
+            if (this.empty()) {
+                this.peekEl = x
+            }
+            this.len++
+            this.stack1.add(x)
+        };
+
+        /**
+         * Removes the element from in front of queue and returns that element.
+         * @return {number}
+         */
+        MyQueue.prototype.pop = function() {
+            if (this.empty()) return
+            let i = 0
+            while (i < this.len) {
+                this.stack2.add(this.stack1.get())
+                i++
+            }
+            this.len--
+            let el = this.stack2.get()
+            let j = 0
+            if (this.empty()) {
+                this.peekEl = undefined
+            }
+            while (j < this.len) {
+                let e = this.stack2.get()
+                this.stack1.add(e)
+                if (j === 0) {
+                    this.peekEl = e
+                }
+                j++
+            }
+            return el
+        };
+
+        /**
+         * Get the front element.
+         * @return {number}
+         */
+        MyQueue.prototype.peek = function() {
+            return this.peekEl
+        };
+
+        /**
+         * Returns whether the queue is empty.
+         * @return {boolean}
+         */
+        MyQueue.prototype.empty = function() {
+            return !this.len
+        };
+
+        /**
+         * Your MyQueue object will be instantiated and called as such:
+         * var obj = new MyQueue()
+         * obj.push(x)
+         * var param_2 = obj.pop()
+         * var param_3 = obj.peek()
+         * var param_4 = obj.empty()
+         */
+    </script>
+</body>
+</html>
