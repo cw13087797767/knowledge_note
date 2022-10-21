@@ -62,6 +62,13 @@
             watermarkDom.style.backgroundImage = `url(${imgUrl})`
             document.body.appendChild(watermarkDom)
         };
+
+        // 3、图片蒙层
+        /**
+         * 这个的思路是在图片onload的时候，给他图片外面罩一层div，设为relative
+         * 然后在div层里面加一个蒙层，宽高和图片保持一致，pointerEvents = 'none'
+        */
+
     </script>
 </body>
 </html>
