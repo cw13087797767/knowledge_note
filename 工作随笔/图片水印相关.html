@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 图片水印的处理方式：
+        
+        // 1、canvas绘制图片水印
+        const dragWatermark = async (url = '', text = '') => {
+            return new Promise(async (resolve, reject) => {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+                const imgDom = await getImg(url)
+                const {height, width} = imgDom
+                canvas.width = width
+                canvas.height = height
+                ctx.drawImage(imgDom, 0, 0, width, height)
+                ctx.save()
+                ctx.rotate(-0.25)
+                ctx.font = width / 15 + 'px Arial'
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
+                ctx.fillText(text, width / 20, height / 20)
+                ctx.restore()
+                // ios在展示多个base64图片时，可能会卡死
+                // 但是blob形式的url地址则不会
+                canvas.toBlob(blob => {
+                    resolve(URL.createObjectURL(blob))
+                })
+            });
+        };
+        const getImg = (url = '') => {
+            return new Promise((resolve, reject) => {
+                const img = document.createElement('img')
+                img.src = url
+                img.onload = (el) => {
+                    resolve(el)
+                }
+            });
+        };
+
+        // 2、全局蒙层
+        const addGlobalWatermar = (imgUrl = '') => {
+            // 先把旧水印去掉，防止重复叠加
+            const oldWatermarkDom = document.getElementById('watermarkFilm')
+            if (oldWatermarkDom) oldWatermarkDom.remove()
+            const watermarkDom = document.createElement('div')
+            watermarkDom.style.position = 'fixed'
+            watermarkDom.id = 'watermarkFilm'
+            watermarkDom.style.width = '100%'
+            watermarkDom.style.height = '100%'
+            watermarkDom.style.top = 0
+            watermarkDom.style.left = 0
+            watermarkDom.style.zIndex = 99999
+            // 取消该dom的所有交互事件
+            watermarkDom.style.pointerEvents = 'none'
+            // 水印图片地址 可以是canvas绘制的
+            watermarkDom.style.backgroundImage = `url(${imgUrl})`
+            document.body.appendChild(watermarkDom)
+        };
+    </script>
+</body>
+</html>
