@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .a{
+            margin-left: 200px;
+            margin-top: 200px;
+            display: flex;
+            align-items: center;
+            width: 200px;
+            justify-content: space-between;
+        }
+        .a-child {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            position: relative;
+        }
+        .a-sub-child {
+            width: 40px;
+            height: 16px;
+            position: relative;
+            border-radius: 20px;
+            background: #7291fe;
+        }
+        .active {
+            animation-name: run;
+            animation-iteration-count: 1;
+            /* animation-timing-function: cubic-bezier(.15,.15,.85,.85); */
+            animation-timing-function: cubic-bezier(0,0,1,1);
+            animation-duration: 0.3s;
+            width: 40px;
+            height: 16px;
+            animation-fill-mode: forwards;
+        }
+        @keyframes run {
+            0% {
+                /* width: 40px;
+                height: 16px;
+                transform: translateY(0) translateX(0); */
+                transform: scale(1);
+                left: 0px;
+            }
+            50% {
+                /* width: 30px; */
+                /* height: 12px; */
+                transform: scale(0.7, 0.8);
+                /* transform: translateY(2px)  translateX(5px); */
+            }
+            100% {
+                /* width: 40px; */
+                /* height: 16px; */
+                transform: scale(1);
+                /* transform: translateY(0)  translateX(0); */
+                left: 40px;
+            }
+        }
+        .b{
+            margin-left: 200px;
+            margin-top: 400px;
+            width: 600px;
+            display: flex;
+        }
+        .b-child{
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            border: solid 1px #D7D7D8;
+            margin-right: 32px;
+            position: relative;
+        }
+        .b-child::before{
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 1px;
+            background-color: #D7D7D8;
+            top: 4px;
+            right: 0;
+            transform: translate(32px, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="a">
+        <div class="a-child">
+            <div class="a-sub-child" id="a1"></div>
+        </div>
+        <!-- <div class="a-child">
+            <div class="a-sub-child" id="a2"></div>
+        </div>
+        <div class="a-child">
+            <div class="a-sub-child" id="a3"></div>
+        </div>
+        <div class="a-child">
+            <div class="a-sub-child" id="a4"></div>
+        </div> -->
+    </div>
+    <div class="b">
+        <div class="b-child"></div>
+        <div class="b-child"></div>
+        <div class="b-child"></div>
+        <div class="b-child"></div>
+        <div class="b-child"></div>
+        <div class="b-child"></div>
+    </div>
+    <script>
+        let count = 0;
+        const dom1 = document.getElementById('a1')
+        setTimeout(() => {
+            dom1.className = 'a-sub-child active'
+        }, 1000);
+        // dom1.style.right = '100px'
+        const dom2 = document.getElementById('a2')
+        const dom3 = document.getElementById('a3')
+        const dom4 = document.getElementById('a4')
+        const domArr = [dom1, dom2, dom3, dom4]
+        // let timer = setInterval(() => {
+        //     count++
+        //     count %= 4
+        //     console.log(count)
+        //     domArr.forEach((item, index) => {
+        //         item.classList = count === index ? 'a-sub-child active' : 'a-sub-child'
+        //     })
+        // }, 3000);
+    </script>
+</body>
+</html>
