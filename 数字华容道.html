@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="vue2.js"></script>
+    <!-- <script src="vue2.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <style>
-        .app{
+        .app {
             height: 100%;
-            width:100%;
+            width: 100%;
             user-select: none;
         }
-        .checkerboard{
+
+        .checkerboard {
             height: 600px;
             width: 600px;
             border: solid 1px #eaea;
@@ -20,11 +23,13 @@
             display: flex;
             flex-direction: column;
         }
-        .chess-row{
+
+        .chess-row {
             flex: 1;
             display: flex;
         }
-        .chess-pieces{
+
+        .chess-pieces {
             flex: 1;
             margin: 5px;
             cursor: pointer;
@@ -36,11 +41,13 @@
             border-radius: 5px;
             user-select: none;
         }
-        .ml10{
+
+        .ml10 {
             margin-left: 10px;
         }
     </style>
 </head>
+
 <body>
     <div id="app">
         <div>
@@ -56,13 +63,10 @@
             <button class="ml10" @click="initChess(type)">新的游戏</button></button>
         </div>
         <div class="checkerboard">
-            <div class="chess-row" v-for="(item, index) in chessPieces" :key="index" >
-                <div 
-                    class="chess-pieces" 
-                    :style="`${citem ? 'background: rgb(214, 243, 118);' : ''}}`" v-for="(citem, cindex) in item" 
-                    :key="cindex"
-                    @click="handleClick(citem, index, cindex)"
-                >{{ citem ? citem : '' }}</div>
+            <div class="chess-row" v-for="(item, index) in chessPieces" :key="index">
+                <div class="chess-pieces" :style="`${citem ? 'background: rgb(214, 243, 118);' : ''}}`"
+                    v-for="(citem, cindex) in item" :key="cindex" @click="handleClick(citem, index, cindex)">
+                    {{ citem ? citem : '' }}</div>
             </div>
         </div>
         <div class="labelContent">
@@ -73,45 +77,45 @@
     </div>
     <script>
         const app = new Vue({
-            el:"#app",
-            data:{
-                chessPieces:[],
-                reloadChessPieces:[],
-                reloadNullChess:{},
-                nullChess:{},
-                playEnd:false,
-                count:0,
-                type:3,
-                startTime:null,
-                timer:null,
-                useTime:0
+            el: "#app",
+            data: {
+                chessPieces: [],
+                reloadChessPieces: [],
+                reloadNullChess: {},
+                nullChess: {},
+                playEnd: false,
+                count: 0,
+                type: 3,
+                startTime: null,
+                timer: null,
+                useTime: 0
             },
-            created(){
+            created() {
                 this.initChess(this.type)
             },
-            methods:{
-                changeType(type){
+            methods: {
+                changeType(type) {
                     this.type = type
                     this.initChess(type)
                 },
-                conputeUseTIme(){
+                conputeUseTIme() {
                     this.useTime = (new Date().valueOf() - new Date(this.startTime).valueOf()) / 1000
                 },
-                reload(){
+                reload() {
                     this.chessPieces = JSON.parse(JSON.stringify(this.reloadChessPieces))
                     this.nullChess = JSON.parse(JSON.stringify(this.reloadNullChess))
                     this.resetVal()
                 },
-                mixinChess(){
-                    const step = Math.floor(Math.random()*1000)
+                mixinChess() {
+                    const step = Math.floor(Math.random() * 1000)
                     for (let i = 0; i < step; i++) {
                         if (i % 2 === 0) {
                             const x = this.nullChess.x
-                            const y = Math.round(Math.random()*(this.chessPieces.length - 1))
+                            const y = Math.round(Math.random() * (this.chessPieces.length - 1))
                             this.handleClick(this.chessPieces[x][y], x, y, true)
                         } else {
                             const y = this.nullChess.y
-                            const x = Math.round(Math.random()*(this.chessPieces.length - 1))
+                            const x = Math.round(Math.random() * (this.chessPieces.length - 1))
                             this.handleClick(this.chessPieces[x][y], x, y, true)
                         }
                     }
@@ -119,7 +123,7 @@
                     this.reloadNullChess = JSON.parse(JSON.stringify(this.nullChess))
                     this.resetVal()
                 },
-                resetVal(){
+                resetVal() {
                     this.count = 0
                     this.playEnd = false
                     this.startTime = new Date()
@@ -132,7 +136,7 @@
                         this.conputeUseTIme()
                     }, 200);
                 },
-                initChess(type){
+                initChess(type) {
                     const chessPieces = []
                     let num = 1
                     for (let i = 0; i < type; i++) {
@@ -153,13 +157,13 @@
                     }
                     this.mixinChess()
                 },
-                handleClick(number, x, y, status){
+                handleClick(number, x, y, status) {
                     if (this.playEnd) {
                         return
                     }
                     // 点击空位置
                     if (x === this.nullChess.x && y === this.nullChess.y) {
-                        return 
+                        return
                     }
                     // 点击与不相连的棋子
                     if (x !== this.nullChess.x && y !== this.nullChess.y) {
@@ -169,7 +173,7 @@
                         // 横向移动
                         if (x === this.nullChess.x) {
                             chessPieces[x].splice(this.nullChess.y, 1)
-                            chessPieces[x].splice(y,0,number)
+                            chessPieces[x].splice(y, 0, number)
                         } else {
                             // 纵向移动
                             const arr = []
@@ -183,7 +187,10 @@
                             }
                         }
                         chessPieces[x][y] = 0
-                        this.nullChess = {x, y}
+                        this.nullChess = {
+                            x,
+                            y
+                        }
                         this.chessPieces = chessPieces
                     }
                     if (!status) {
@@ -193,7 +200,7 @@
                         });
                     }
                 },
-                isWin(){
+                isWin() {
                     if (this.chessPieces.map(item => item.join('')).join('') === this.getWinStatus()) {
                         alert('你赢了')
                         this.playEnd = true
@@ -203,8 +210,9 @@
                         }
                     }
                 },
-                getWinStatus(){
-                    let str = '', count = 1
+                getWinStatus() {
+                    let str = '',
+                        count = 1
                     for (let i = 0; i < this.type; i++) {
                         for (let j = 0; j < this.type; j++) {
                             if (i === this.type - 1 && j === this.type - 1) {
@@ -220,4 +228,5 @@
         })
     </script>
 </body>
+
 </html>
