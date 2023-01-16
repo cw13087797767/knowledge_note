@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 一个句子是由一些单词与它们之间的单个空格组成，且句子的开头和结尾没有多余空格。比方说，"Hello World" ，"HELLO" ，"hello world hello world" 都是句子。每个单词都 只 包含大写和小写英文字母。
+
+        // 如果两个句子 sentence1 和 sentence2 ，可以通过往其中一个句子插入一个任意的句子（可以是空句子）而得到另一个句子，那么我们称这两个句子是 相似的 。比方说，sentence1 = "Hello my name is Jane" 且 sentence2 = "Hello Jane" ，我们可以往 sentence2 中 "Hello" 和 "Jane" 之间插入 "my name is" 得到 sentence1 。
+
+        // 给你两个句子 sentence1 和 sentence2 ，如果 sentence1 和 sentence2 是相似的，请你返回 true ，否则返回 false 。
+
+        //  
+
+        // 示例 1：
+
+        // 输入：sentence1 = "My name is Haley", sentence2 = "My Haley"
+        // 输出：true
+        // 解释：可以往 sentence2 中 "My" 和 "Haley" 之间插入 "name is" ，得到 sentence1 。
+        // 示例 2：
+
+        // 输入：sentence1 = "of", sentence2 = "A lot of words"
+        // 输出：false
+        // 解释：没法往这两个句子中的一个句子只插入一个句子就得到另一个句子。
+        // 示例 3：
+
+        // 输入：sentence1 = "Eating right now", sentence2 = "Eating"
+        // 输出：true
+        // 解释：可以往 sentence2 的结尾插入 "right now" 得到 sentence1 。
+        // 示例 4：
+
+        // 输入：sentence1 = "Luky", sentence2 = "Lucccky"
+        // 输出：false
+        //  
+
+        // 提示：
+
+        // 1 <= sentence1.length, sentence2.length <= 100
+        // sentence1 和 sentence2 都只包含大小写英文字母和空格。
+        // sentence1 和 sentence2 中的单词都只由单个空格隔开。
+
+        // 来源：力扣（LeetCode）
+        // 链接：https://leetcode.cn/problems/sentence-similarity-iii
+        // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        /**
+         * @param {string} sentence1
+         * @param {string} sentence2
+         * @return {boolean}
+         */
+        var areSentencesSimilar = function(sentence1, sentence2) {
+            // 区分长文案和短文案
+            let large = sentence1.length > sentence2.length ? sentence1 : sentence2
+            let small = sentence1.length > sentence2.length ? sentence2 : sentence1
+            let largeArr = large.split(' ')
+            let smallArr = small.split(' ')
+            // 拼接在前面
+            // 区分三种情况 0 表示正常往下执行 1表示不满足
+            let status = 0
+            while (status < 1) {
+                if (!smallArr.length) return true
+                if (smallArr[0] === largeArr[0]) {
+                    largeArr.shift()
+                    smallArr.shift()
+                } else {
+                    status = 1
+                }
+            }
+            // 拼接在后面 
+            // 区分三种情况 0 表示正常往下执行 1表示不满足
+            status = 0
+            largeArr = large.split(' ').reverse()
+            smallArr = small.split(' ').reverse()
+            while (status < 1) {
+                if (!smallArr.length) return true
+                if (smallArr[0] === largeArr[0]) {
+                    largeArr.shift()
+                    smallArr.shift()
+                } else {
+                    status = 1
+                }
+            }
+            // 拼接在中间
+            status = 0
+            largeArr = large.split(' ')
+            smallArr = small.split(' ')
+            // 状态 0 消除前面的 1 消除后面的 2 如果前后匹配完后 smallArr还有剩余，则表示不匹配
+            while (status < 2) {
+                // 从前往后消
+                if (status === 0) {
+                    if (largeArr[0] === smallArr[0]) {
+                        largeArr.shift()
+                        smallArr.shift()
+                    } else {
+                        status = 1
+                    }
+                } else {
+                    if (largeArr[largeArr.length - 1] === smallArr[smallArr.length - 1]) {
+                        largeArr.pop()
+                        smallArr.pop()
+                    } else {
+                        status = 2
+                    }
+                }
+            }
+            return !smallArr.length
+        };
+    </script>
+</body>
+</html>
