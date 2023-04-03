@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给你一个字符串 s，以及该字符串中的一些「索引对」数组 pairs，其中 pairs[i] = [a, b] 表示字符串中的两个索引（编号从 0 开始）。
+
+        // 你可以 任意多次交换 在 pairs 中任意一对索引处的字符。
+
+        // 返回在经过若干次交换后，s 可以变成的按字典序最小的字符串。
+
+        //  
+
+        // 示例 1:
+
+        // 输入：s = "dcab", pairs = [[0,3],[1,2]]
+        // 输出："bacd"
+        // 解释： 
+        // 交换 s[0] 和 s[3], s = "bcad"
+        // 交换 s[1] 和 s[2], s = "bacd"
+        // 示例 2：
+
+        // 输入：s = "dcab", pairs = [[0,3],[1,2],[0,2]]
+        // 输出："abcd"
+        // 解释：
+        // 交换 s[0] 和 s[3], s = "bcad"
+        // 交换 s[0] 和 s[2], s = "acbd"
+        // 交换 s[1] 和 s[2], s = "abcd"
+        // 示例 3：
+
+        // 输入：s = "cba", pairs = [[0,1],[1,2]]
+        // 输出："abc"
+        // 解释：
+        // 交换 s[0] 和 s[1], s = "bca"
+        // 交换 s[1] 和 s[2], s = "bac"
+        // 交换 s[0] 和 s[1], s = "abc"
+        //  
+
+        // 提示：
+
+        // 1 <= s.length <= 10^5
+        // 0 <= pairs.length <= 10^5
+        // 0 <= pairs[i][0], pairs[i][1] < s.length
+        // s 中只含有小写英文字母
+
+        // 来源：力扣（LeetCode）
+        // 链接：https://leetcode.cn/problems/smallest-string-with-swaps
+        // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        /**
+         * @param {string} s
+         * @param {number[][]} pairs
+         * @return {string}
+         * 实现思路：
+         * 1、生成一个并查集
+         * 2、根据并查集关系创建多个存在关系的数组
+         * 3、将数组按字符顺序进行排序
+         * 4、遍历数组 替换原有字符串内的字符
+         */
+        var smallestStringWithSwaps = function (s, pairs) {
+            // 并查集
+            const fa = new Array(100010).fill(0);
+            // 查找父节点
+            const find = (x) => {
+                return x === fa[x] ? x : fa[x] = find(fa[x]);
+            }
+
+            const n = s.length;
+            for (let i = 0; i < n; i++) {
+                fa[i] = i;
+            }
+            for (let i = 0; i < pairs.length; ++i) {
+                const x = pairs[i][0], y = pairs[i][1];
+                const ux = find(x), uy = find(y);
+                if (ux ^ uy) {
+                    fa[ux] = uy;
+                }
+            }
+            // 关系集合数组
+            const vec = new Array(n).fill(0).map(() => new Array());
+            for (let i = 0; i < n; i++) {
+                fa[i] = find(i);
+                vec[fa[i]].push(s[i]);
+            }
+
+            for (let i = 0; i < n; ++i) {
+                if (vec[i].length > 0) {
+                    vec[i].sort((a, b) => a.charCodeAt() - b.charCodeAt());
+                }
+            }
+            const p = new Array(n).fill(0);
+            let ans = [];
+            for (let i = 0; i < n; ++i) {
+                ans.push('1');
+            }
+
+            for (let i = 0; i < n; ++i) {
+                ans[i] = vec[fa[i]][p[fa[i]]];
+                p[fa[i]]++;
+            }
+
+            return ans.join('');
+        };
+    </script>
+</body>
+
+</html>

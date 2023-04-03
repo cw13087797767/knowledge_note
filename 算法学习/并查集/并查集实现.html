@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 关系数组
+        const arr = new Array(1000).fill(1)
+        // 创建关系数组
+        const fa = new Array(1000).fill(0)
+        // 查找父节点关系
+        const find = (x) => {
+            return x === fa[x] ? x : fa[x] = find(fa[x]) 
+        }
+        const merge = (x, y) => {
+            fa[find(x)] = find(y)
+        }
+        for (let i = 0; i < arr.length; i++) {
+            fa[i] = arr[i]
+        }
+    </script>
+</body>
+</html>
