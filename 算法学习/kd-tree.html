@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 学习地址 https://zhuanlan.zhihu.com/p/393775739
+        function KDTNode(point, axis) {
+            this.point = point
+            this.axis = axis
+            this.left = null
+            this.right = null
+        }
+
+        function buildKDTree(points, depth = 0) {
+            if (!points.length) return null
+            const k = 2
+            const axis = depth % k
+            points.sort((a, b) => axis ? a.y - b.y : a.x - b.x)
+            const median = Math.floor(points.length / 2)
+            const node = new KDTNode(points[median], axis)
+            node.left = buildKDTree(points.slice(0, median), depth + 1)
+            node.right = buildKDTree(points.slice(median + 1), depth + 1)
+            return node
+        }
+
+        // gpt生成的代码有问题
+        function rangeQuery(node, point, radius, result = []) {
+            if (!node) return
+            const axis = node.axis
+            const sqDist = getSqDist(point[0], point[1], node.point.x, node.point.y)
+            if (sqDist < radius ** 2) {
+                const sqDistToNode = Math.pow(point[0] - node.point.x, 2) + Math.pow(point[1] - node.point.y, 2)
+                if (sqDistToNode < radius ** 2) {
+                    result.push(node.point)
+                }
+                rangeQuery(node.left, point, radius, result)
+                rangeQuery(node.right, point, radius, result)
+            } else {
+                const next = axis ? point[0] < node.point.x : point[1] - node.point.y
+                const nextNode = next ? node.left : node.right
+                rangeQuery(nextNode, point, radius, result)
+            }
+            return result
+        }
+
+        function getSqDist(ax, ay, bx, by) {
+            const dx = ax - bx
+            const dy = ay - by
+            return dx ** 2 + dy ** 2
+        }
+
+
+        const fn = (radius = 0) => {
+            const arr = [
+                { x: 2, y: 3, num: 1 },
+                { x: 4, y: 7, num: 1 },
+                { x: 5, y: 4, num: 1 },
+                { x: 7, y: 2, num: 1 },
+                { x: 8, y: 1, num: 1 },
+                { x: 9, y: 6, num: 1 }
+            ];
+            const kdTree = buildKDTree(arr)
+            console.log(JSON.parse(JSON.stringify(kdTree)))
+            arr.forEach(spot => {
+                const nearbySpots = rangeQuery(kdTree, [spot.x, spot.y], radius)
+                console.log(spot, JSON.parse(JSON.stringify(nearbySpots)))
+                nearbySpots.forEach(nearBySpot => {
+                    spot.num++
+                })
+            })
+            return arr
+        };
+
+        console.log(fn(5))
+    </script>
+</body>
+
+</html>
