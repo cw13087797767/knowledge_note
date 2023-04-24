@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 在第 1 天，有一个人发现了一个秘密。
+
+        // 给你一个整数 delay ，表示每个人会在发现秘密后的 delay 天之后，每天 给一个新的人 分享 秘密。
+        // 同时给你一个整数 forget ，表示每个人在发现秘密 forget 天之后会 忘记 这个秘密。一个人 不能 在忘记秘密那一天及之后的日子里分享秘密。
+
+        // 给你一个整数 n ，请你返回在第 n 天结束时，知道秘密的人数。由于答案可能会很大，请你将结果对 109 + 7 取余 后返回。
+
+        //  
+
+        // 示例 1：
+
+        // 输入：n = 6, delay = 2, forget = 4
+        // 输出：5
+        // 解释：
+        // 第 1 天：假设第一个人叫 A 。（一个人知道秘密）
+        // 第 2 天：A 是唯一一个知道秘密的人。（一个人知道秘密）
+        // 第 3 天：A 把秘密分享给 B 。（两个人知道秘密）
+        // 第 4 天：A 把秘密分享给一个新的人 C 。（三个人知道秘密）
+        // 第 5 天：A 忘记了秘密，B 把秘密分享给一个新的人 D 。（三个人知道秘密）
+        // 第 6 天：B 把秘密分享给 E，C 把秘密分享给 F 。（五个人知道秘密）
+        // 示例 2：
+
+        // 输入：n = 4, delay = 1, forget = 3
+        // 输出：6
+        // 解释：
+        // 第 1 天：第一个知道秘密的人为 A 。（一个人知道秘密）
+        // 第 2 天：A 把秘密分享给 B 。（两个人知道秘密）
+        // 第 3 天：A 和 B 把秘密分享给 2 个新的人 C 和 D 。（四个人知道秘密）
+        // 第 4 天：A 忘记了秘密，B、C、D 分别分享给 3 个新的人。（六个人知道秘密）
+        //  
+
+        // 提示：
+
+        // 2 <= n <= 1000
+        // 1 <= delay < forget <= n
+
+        // 来源：力扣（LeetCode）
+        // 链接：https://leetcode.cn/problems/number-of-people-aware-of-a-secret
+        // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        /**
+         * @param {number} n
+         * @param {number} delay
+         * @param {number} forget
+         * @return {number}
+         * 不行 内存会炸
+         */
+        // var peopleAwareOfSecret = function (n, delay, forget) {
+        //     const arr = [new User(delay, forget)]
+        //     const mod = 1e9 + 7
+        //     for (let i = 0; i < n - 1; i++) {
+        //         const newUser = []
+        //         for (let j = arr.length - 1; j > -1; j--) {
+        //             const type = arr[j].handleNext()
+        //             if (type === 'deat') {
+        //                 arr.splice(j, 1)
+        //             } else if (type === 'active') {
+        //                 newUser.push(new User(delay, forget))
+        //             }
+        //         }
+        //         arr.push(...newUser)
+        //     }
+        //     return arr.length % mod
+        // };
+        // function User(delay, forget) {
+        //     this.delay = delay
+        //     this.forget = forget
+        //     this.handleNext = function () {
+        //         --this.delay
+        //         --this.forget
+        //         if (this.forget <= 0) return 'deat'
+        //         return this.delay <= 0 ? 'active' : 'sleep'
+        //     }
+        // };
+
+        /**
+         * @param {number} n
+         * @param {number} delay
+         * @param {number} forget
+         * @return {number}
+         */
+        var peopleAwareOfSecret = function (n, delay, forget) {
+            let res = Array(forget).fill(0)
+            const MOD = 1e9 + 7;
+            res[0] = 1
+            while (--n) {
+                // 最关键的一步 计算今天可以传播的人数等于[delay - 1，forget - 1]之间的总和，也就是forget-delay中间可以传播的天数
+                let sum = res.slice(delay - 1, forget - 1).reduce((sum, num) => (sum + num) % MOD, 0)
+                // 状态转移 把当前未忘记的人数顺延到下一题，最后一天的直接丢弃掉
+                for (let i = forget - 1; i >= 1; i--) {
+                    res[i] = res[i - 1]
+                }
+                res[0] = sum
+            }
+            let count = res.reduce((sum, num) => (sum + num) % MOD, 0)
+            return count
+        };
+    </script>
+</body>
+
+</html>
