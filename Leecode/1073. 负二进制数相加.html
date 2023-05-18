@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给出基数为 -2 的两个数 arr1 和 arr2，返回两数相加的结果。
+
+        // 数字以 数组形式 给出：数组由若干 0 和 1 组成，按最高有效位到最低有效位的顺序排列。例如，arr = [1,1,0,1] 表示数字 (-2)^3 + (-2)^2 + (-2)^0 = -3。数组形式 中的数字 arr 也同样不含前导零：即 arr == [0] 或 arr[0] == 1。
+
+        // 返回相同表示形式的 arr1 和 arr2 相加的结果。两数的表示形式为：不含前导零、由若干 0 和 1 组成的数组。
+
+        //  
+
+        // 示例 1：
+
+        // 输入：arr1 = [1,1,1,1,1], arr2 = [1,0,1]
+        // 输出：[1,0,0,0,0]
+        // 解释：arr1 表示 11，arr2 表示 5，输出表示 16 。
+        // 示例 2：
+
+        // 输入：arr1 = [0], arr2 = [0]
+        // 输出：[0]
+        // 示例 3：
+
+        // 输入：arr1 = [0], arr2 = [1]
+        // 输出：[1]
+        //  
+
+        // 提示：
+
+        // 1 <= arr1.length, arr2.length <= 1000
+        // arr1[i] 和 arr2[i] 都是 0 或 1
+        // arr1 和 arr2 都没有前导0
+
+        // 来源：力扣（LeetCode）
+        // 链接：https://leetcode.cn/problems/adding-two-negabinary-numbers
+        // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+        /**
+         * @param {number[]} arr1
+         * @param {number[]} arr2
+         * @return {number[]}
+         * 按位累加，处理极端值3、2、-1
+         * 处理完之后 再把前导0给去掉
+         */
+        var addNegabinary = function (arr1, arr2) {
+            arr1.reverse()
+            arr2.reverse()
+            const map = new Map()
+            const ans = []
+            for (let i = 0; i < arr1.length; i++) {
+                map.set(i, (map.get(i) || 0) + arr1[i])
+            }
+            for (let i = 0; i < arr2.length; i++) {
+                map.set(i, (map.get(i) || 0) + arr2[i])
+            }
+            let i = 0
+            while (i < map.size) {
+                const num = map.get(i)
+                switch (num) {
+                    case -1:
+                        map.set(i + 1, (map.get(i + 1) || 0) + 1)
+                        ans.unshift(1)
+                        break;
+                    case 2:
+                        map.set(i + 1, (map.get(i + 1) || 0) - 1)
+                        ans.unshift(0)
+                        break;
+                    case 3:
+                        map.set(i + 1, (map.get(i + 1) || 0) - 1)
+                        ans.unshift(1)
+                        break;
+                    default:
+                        ans.unshift(num)
+                }
+                ++i
+            }
+            while (ans[0] === 0 && ans.length > 1) {
+                ans.shift()
+            }
+            return ans
+        };
+    </script>
+</body>
+
+</html>
