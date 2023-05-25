@@ -63,3 +63,8 @@ state的更新需要用到setState方法，setState方法是将state需要更新
 
 ## 使用后react Hooks的好处是什么？
 Hooks是16.8中新加的内容。它的作用是允许不编写类组件的情况下，函数式组件也能使用state和react的其他特性。
+
+
+## 什么是 react context？
+context是通过组件数提供了一个传递数据的方法，从而避免在每一个层级手动传递props
+参考地址：https://blog.csdn.net/qq_41809113/article/details/122460679
