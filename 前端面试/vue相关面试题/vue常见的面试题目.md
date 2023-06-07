@@ -81,8 +81,8 @@ diff算法是拿新旧两个虚拟dom进行比对。比对是只会在同层级�
 子 mounted
 
 ### 子组件更新过程
-父 beforUpdate
-子 beforeupdate
+父 beforeUpdate
+子 beforeUpdate
 子 updated
 父 updated
 
@@ -123,3 +123,10 @@ abstract路由是针对没有浏览器环境的情况，比如weex客户端开�
 
 ## 为什么说VUE是一个渐进式的javascript框架, 渐进式是什么意思?
 渐进式框架的意思是我们使用vue框架时，不强求我们一次性使用完vue中所有的功能特性。我们只用其中的一部分，而不是所有。举个简单的例子，一些简单的应用并不需要引入vuex、vue-router等。但随着项目的逐渐变大，那么将会逐步的引入进来。
+
+
+## vue3为什么选用proxy实现响应式，而不是Object.defineProperty？
+1、proxy可以代理任何对象，Object.defineProperty只能代理常规对象
+2、proxy比Object.defineProperty具有更多的基本语义的操作
+3、不用循环遍历对象在使用Object.defineProperty，proxy可以代理对象内所有的属性
+4、Object.defineProperty只能劫持对象的属性，给对象新增的属性在vue中无法检测到
