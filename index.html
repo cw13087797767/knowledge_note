@@ -24,3 +24,51 @@
 </body>
 
 </html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 给定一个只包含大写字母的字符串s，字符消除过程是如下进行的：
+        // 1)如果s包含长度为2的由相同字母组成的子串，那么这些子串会被消除，余下的子串拼成新的字符串。
+        // 例如”ABCCBCCCAA”中”CC”,”CC”和”AA”会被同时消除，余下”AB”, “C”和”B”拼成新的字符串”ABBC”。
+        // 2)上述消除会反复一轮一轮进行，直到新的字符串不包含相邻的相同字符为止。
+        // 例如”ABCCBCCCAA”经过一轮消除得到”ABBC”，再经过一轮消除得到”AC”
+        // 输入描述:
+        // 输入包括一行, 由大写字母组成的字符串s，长度不超过100.
+        // 输出描述:
+        // 对于每组测试数据, 若最后可以把整个字符串全部消除, 就输出 Yes, 否则输出 No.
+        // 示例:
+
+        // 输入：ABCCBA
+        // 输出：Yes
+
+        // 输入：ABCCCCCBBBBB
+        // 输出：No
+
+        const fn = (str = '') => {
+            let status = true
+            while (status && str.length > 1) {
+                let flag = true
+                for (let i = 1; i < str.length; i++) {
+                    if (str[i] === str[i - 1]) {
+                        flag = false
+                        str = str.substring(0, i - 1) + str.substring(i + 1)
+                        break
+                    }
+                }
+                status = !flag
+            }
+            return str ? 'No' : 'Yes'
+        }
+    </script>
+</body>
+
+</html>
